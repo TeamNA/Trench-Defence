@@ -1,10 +1,18 @@
 #include "GameHUD.h"
 #include "DataModel.h"
+#include "Level1Scene.h"
 
 GameHUD* GameHUD::_sharHUD;
 
 bool GameHUD::init()
 {
+	DataModel *m = DataModel::getModel();
+	GameHUD* score;
+
+	//__String *tempscore = __String::createWithFormat("%i", b);
+
+	//	scoreLabel = Label::createWithTTF(tempscore->getCString(), "Helvetica", 12);
+
 	if (!Layer::init())
 	{
 		return false;
@@ -15,40 +23,63 @@ bool GameHUD::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+	_label = new CCLabelTTF();
+	_label->initWithString("5", "Verdana-Bold", 18.0);
+	_label->setColor(ccc3(0, 0, 0));
+
 	// Draw the background of the game HUD
 	CCTexture2D::setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_RGBA8888);
 	background = Sprite::create("hud.png");
-	background->setScaleX(0.5);
+	background->setScaleX(2.3);
+	background->setScaleY(1.95);
 
 	// Create an anchor point at the bottom of the screen to put the hud box
 	// ignoreAnchorPointForPosition(false);
 	// background->setAnchorPoint(Vec2(0.5, 0.5));
 	// background->setPosition(Vec2(0.5, 1));
-	background->setPosition(Point(visibleSize.width*(0.28) + origin.x, visibleSize.height*(0.35) + origin.y));
+	background->setPosition(Point(visibleSize.width*(0.28) + origin.x, visibleSize.height*(0.1) + origin.y));
 	this->addChild(background);
 	//CCTexture2D::setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_Default);
 
 	// Create 4 turret images for the hud box and add them to the stack
 	Vector<String*> images;
-	images.pushBack(StringMake("MachineGunTurret.png"));
-	images.pushBack(StringMake("MachineGunTurret.png"));
-	images.pushBack(StringMake("MachineGunTurret.png"));
-	images.pushBack(StringMake("MachineGunTurret.png"));
+	images.pushBack(StringMake("GunStill.png"));
+	images.pushBack(StringMake("GunStill.png"));
+	images.pushBack(StringMake("GunStill.png"));
+	images.pushBack(StringMake("GunStill.png"));
+
+	CCLabelTTF* ttf1 = CCLabelTTF::create("COINS = ", "Helvetica", 15,
+		CCSizeMake(245, 32), kCCTextAlignmentCenter);
+
+
+	//scoreLabel = Label::create(tempscore->getCString(), "Helvetica", 12,
+	//CCSizeMake(245, 32), kCCTextAlignmentCenter);
+
+
 	// For each image, increment the offset and add the image.
 	for (int i = 0; i < images.size(); ++i)
 	{
 		String* image = images.at(i);
 		auto *sprite = Sprite::create(image->getCString());
 		float offsetFraction = ((float)(i + 1)) / (images.size() + 1);
-		sprite->setScale(0.4);
+		sprite->setScale(0.9);
 		// sprite->setPosition(Point(visibleSize.width*(0.28) + origin.x, visibleSize.height*(0.35) + origin.y));
-		sprite->setPosition(Vec2(winSize.width*(offsetFraction/1.5), visibleSize.height*(0.35) + origin.y)); 
+		sprite->setPosition(Vec2(winSize.width*(offsetFraction / 1.5), visibleSize.height*(0.11) + origin.y));
 		// sprite->setPosition(Vec2(winSize.width*offsetFraction, winSize.height*0.8));
-		sprite->setContentSize(Size(50,50)); // MD
+		sprite->setContentSize(Size(50, 50)); // MD
 		this->addChild(sprite);
 		movableSprites.pushBack(sprite);
 	}
 
+
+	ttf1->setPosition(Vec2(winSize.width - 90, visibleSize.height*(0.08) + origin.y));
+	ttf1->setColor(ccc3(0, 0, 0));
+	_label->setPosition(Vec2(winSize.width - 50, visibleSize.height*(0.10) + origin.y));
+	//scoreLabel->setColor(ccc3(0, 0, 0));
+
+
+	this->addChild(ttf1);
+	this->addChild(_label);
 	return true;
 }
 
@@ -177,5 +208,12 @@ void GameHUD::onTouchEnded(Touch* touch, Event* event)
 		this->removeChild(selSpriteRange, true);
 		selSpriteRange = NULL;
 	}
-	
+
+}
+
+void GameHUD::numCollectedChanged(int numCollected)
+{
+	CCString *labelCollected = new CCString();
+	labelCollected->initWithFormat("%d", numCollected);
+	_label->setString(labelCollected->getCString());
 }
