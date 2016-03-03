@@ -7,7 +7,7 @@
 #include "WayPoint.h"
 #include "Creep.h"
 #include "Level1Scene.h"
-#include "GameHUD.h" // Maybe comment out?
+// #include "GameHUD.h" // Maybe comment out?
 #include "Tower.h" 
 #include "Projectile.h"
 // #include "Wave.h"

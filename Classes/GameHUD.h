@@ -11,7 +11,7 @@ public:
 	Sprite* selSprite;
 	Vector<Sprite*> movableSprites;
 	static GameHUD* _sharHUD;
-	static CCScene scene();
+	// static CCScene scene();
 	virtual bool init();
 	static GameHUD* shareHUD();
 	CREATE_FUNC(GameHUD);
@@ -25,5 +25,5 @@ public:
 
 private:
 	cocos2d::Label *scoreLabel;
-	CCLabelTTF *_label;
+	LabelTTF *_label;
 };

@@ -16,7 +16,6 @@ public:
 
 	~Level1();
 	virtual bool init();
-
 	// Important Variables
 	int currentLevel;
 	void addWayPoint();
@@ -27,7 +26,7 @@ public:
 	virtual void update(float dt);
 	Wave* getCurrentWave();
 	Wave* getNextWave();
-
+	int count = 0;
 
 	// implement the "static create()" method manually
 	CREATE_FUNC(Level1);
@@ -35,22 +34,32 @@ public:
 	void menuCloseCallback(cocos2d::Ref* pSender);
 	void setViewPointCenter(cocos2d::Point position);
 	// Tower
-	void addTower(Point pos);
+	void addTower(Point pos, std::string towerType);
 	Point tileCoordForPosition(Point position);
 	bool canBuildOnTilePosition(Point pos);
 	Point boundLayerPos(Point newPos);
+	int getCount() { return count; };
+	void setCount(int c) { count = c; };
 
 	Point position;
 	GameHUD *gameHUD;
 
+	// void onEnter();
+	// void onExit();
+
 private:
-	
-	CCTMXTiledMap *_tileMap;
-	CCTMXLayer *_background;
-	CCTMXLayer *_walls;
-	CCTMXLayer *_turrets;
-	CCTMXLayer *_buildable;
-	CCSprite *_enemyUnit1;
+
+	TMXTiledMap *_tileMap;
+	TMXLayer *_background;
+	TMXLayer *_Sources;
+	TMXLayer *_Quicksand;
+	TMXLayer *_walls;
+	TMXLayer *_turrets;
+	TMXLayer *_buildable;
+	Sprite *_enemyUnit1;
+	cocos2d::Label *scoreLabel;
+	GameHUD *_hud;
+	int _numCollected = 5;
 };
 
-#endif // __LEVEL1_SCENE_H__
+#endif

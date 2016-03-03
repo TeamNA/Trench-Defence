@@ -1,20 +1,23 @@
-#include "ui/CocosGUI.h"
-#include <iostream>
 // #include "base/CCValue.h"
 #include "Level1Scene.h"
+#include "StartMenuScene.h"
 #include "Tower.h" // We will deal with it later.
 #include "DataModel.h"
 #include <Vector>
 #include <string>
-
-
+#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
+
+int totalCreepsLeft = 75;
 
 Scene* Level1::createScene()
 {
 	// 'Level1Scene' is an autorelease object
 	auto Level1Scene = Scene::create();
+
+	CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("short.wav", true);
 
 	// 'layer' is an autorelease object
 	auto layer = Level1::create();
@@ -23,8 +26,9 @@ Scene* Level1::createScene()
 	// Level1Scene->addChild(layer);
 
 	// Add the HUD to the main game
-	auto myGameHUD = GameHUD::shareHUD();
-
+	// auto myGameHUD = GameHUD::shareHUD();
+	GameHUD *hud = new GameHUD;
+	hud->init();
 	// add gameHUD
 	// Level1Scene->addChild(myGameHUD, 3);
 
@@ -32,12 +36,14 @@ Scene* Level1::createScene()
 	// auto myGameHUD = GameHUD::shareHUD();
 
 	Level1Scene->addChild(layer);
-	Level1Scene->addChild(myGameHUD, 1);
+	Level1Scene->addChild(hud);
+	// Level1Scene->addChild(myGameHud);
 
 	DataModel *m = DataModel::getModel();
 	m->_gameLayer = layer; // add this
-	m->_gameHUDLayer = myGameHUD;
-	
+	layer->_hud = hud;
+
+
 
 	// return the scene
 	return Level1Scene;
@@ -51,11 +57,10 @@ Level1::~Level1()
 // on "init" you need to initialize your instance
 bool Level1::init()
 {
-	/*
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = [&](Touch *touch, Event *unused_event)->bool {return true; };
 	listener->onTouchEnded = CC_CALLBACK_2(Level1::onTouchEnded, this);
-	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);*/
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 	//////////////////////////////
 	// 1. super init first
@@ -76,16 +81,8 @@ bool Level1::init()
 	// _tileMap->setScale(visibleSize.width / 220 , visibleSize.height / 220);
 	// Add the background
 	_background = _tileMap->layerNamed("Background");
-	// _buildable = _tileMap->layerNamed("buildable");
-
-	// this->addChild(_tileMap, -1);
-	// Add the walls
-	// _walls = _tileMap->layerNamed("Walls");
-
-	// this->addChild(_tileMap, 0);
-
-	// Add the turret bases
-	// _turrets = _tileMap->layerNamed("Turrets");
+	_Sources = _tileMap->layerNamed("Sources");
+	_Quicksand = _tileMap->layerNamed("Quicksand");
 
 	this->addChild(_tileMap, -1);
 
@@ -99,20 +96,6 @@ bool Level1::init()
 
 	int x = enemySpawnPoint["x"].asInt();
 	int y = enemySpawnPoint["y"].asInt();
-
-	_enemyUnit1 = Sprite::create("Enemy1.png");
-	_enemyUnit1->setPosition(x + _tileMap->getTileSize().width /2, y + _tileMap->getTileSize().height / 2);
-	// _enemyUnit1->setPosition(x,y);
-	_enemyUnit1->setScale(0.2);
-
-	addChild(_enemyUnit1);
-	setViewPointCenter(_enemyUnit1->getPosition());
-
-
-	/////////////////////////////
-	// 3. add turrets positions to the map so they can
-	//    be added by the player later
-
 
 
 	/////////////////////////////
@@ -133,13 +116,14 @@ bool Level1::init()
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
 
-	
+
 	this->addWayPoint();
 	this->addWaves();
 	this->scheduleUpdate();
 	this->schedule(schedule_selector(Level1::gameLogic), 1.0f);
 	this->currentLevel = 0;
-	
+
+	// setViewPointCenter(_tileMap->getPositionX);
 
 	return true;
 }
@@ -167,7 +151,8 @@ void Level1::setViewPointCenter(Point position) {
 	this->setPosition(viewPoint);
 }
 
-
+// Here we read the value from the class ‘creep’. 
+// And we make the enemy move. 
 void Level1::FollowPath(Node *sender)
 {
 	Creep *creep = (Creep *)sender;
@@ -181,24 +166,27 @@ void Level1::FollowPath(Node *sender)
 	creep->runAction(Sequence::create(actionMove, actionMoveDone, NULL));
 }
 
-// Here we read the value from the class ‘creep’. And we make the enemy move. 
 
+// Here, we set the parameters for the class ‘Wave’ 
+// about the creep type, spawn rate and the number of the creep.
 void Level1::addWaves()
 {
 	DataModel *m = DataModel::getModel();
 
 	Wave *wave = NULL;
 
+	// Create a wave of 75 Fast red creeps with a spawn rate of 0.7 seconds
 	wave = Wave::create()->initWithCreep(FastRedCreep::creep(), 0.7, 75);
 	m->waves.pushBack(wave);
 	wave = NULL;
 
+	// Create a wave of 10 Strong GreenCreeps and spawn them every 2 seconds
 	wave = Wave::create()->initWithCreep(StrongGreenCreep::creep(), 2.0, 10);
 	m->waves.pushBack(wave);
 	wave = NULL;
 }
 
-// Here, we set the parameters for the class ‘Wave’ about the creep type, spawn rate and the number of the creep.
+
 
 void Level1::addWayPoint()
 {
@@ -308,62 +296,74 @@ Point Level1::tileCoordForPosition(Point position)
 
 bool Level1::canBuildOnTilePosition(Point pos)
 {
-	// There is a problem here.... 
 	Point towerLoc = this->tileCoordForPosition(pos);
-	// int tileGid = this->_background->getTileGIDAt(towerLoc);
-	// and here.... 
 	int tileGid = this->_background->getTileGIDAt(towerLoc);
 	Value props = this->_tileMap->getPropertiesForGID(tileGid);
 
 	// MD
-	// if (!props.isNull){ // NULL check
-	ValueMap map = props.asValueMap();
-	int type_int;
-	if (map.size() == 0)
-	{
-		type_int = 0;
-	}
-	else
-	{
-		type_int = map.at("buildable").asInt();
-		// type_int = map.at("Turrets").asInt();
-	}
-
-	if (1 == type_int)
+	if (props.isNull())   // NULL check
 	{
 		return true;
 	}
-// }
-	return false;
+	ValueMap map = props.asValueMap();
+	bool buildable = true;
+	if (map.size() != 0)
+	{
+
+		buildable = map.at("buildable").asBool();
+	}
+
+	return buildable;
 }
 
-
-void Level1::addTower(Point pos)
+void Level1::addTower(Point pos, std::string towerType)
 {
 	DataModel *m = DataModel::getModel();
 
+	//_numCollected = 5;
 	Tower *target = NULL;
 	Point towerLoc = this->tileCoordForPosition(pos);
-	int tileGid = this->_background->tileGIDAt(towerLoc);
-	Value props = this->_tileMap->propertiesForGID(tileGid);
-	ValueMap map = props.asValueMap();
-
-	int type_int = map.at("buildable").asInt();
-	// int type_int = map.at("Turrets").asInt();
-	if (1 == type_int)
-	{
-		// Problem here....
-		target = MachineGunTower::tower();
-		// target->setPosition(Vec2((towerLoc.x * 32) + 16, this->_tileMap->getContentSize().height - (towerLoc.y * 32) - 16));
-		target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) - 10));
-		this->addChild(target, 1);
-		target->setTag(1);
-		m->towers.pushBack(target);
+	bool buildable = canBuildOnTilePosition(pos);
+	if ((buildable && _numCollected >= 5))  {
+		// Point towerLoc = this->tileCoordForPosition(pos);
+		towerType = towerType.substr(0, 2);
+		CCLOG("TowerType is: %s", towerType.c_str());
+		if (towerType == "MachineGunTower" || towerType == "Ma") {
+			_numCollected = _numCollected - 5;
+			_hud->numCollectedChanged(_numCollected);
+			target = MachineGunTower::tower();
+			target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
+			this->addChild(target, 1);
+			target->setTag(1);
+			m->towers.pushBack(target);
+		}
+		else if(towerType == "FastMachineGunTower" || towerType == "Fa") {
+			_numCollected = _numCollected - 5;
+			_hud->numCollectedChanged(_numCollected);
+			target = FastMachineGunTower::tower();
+			target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
+			this->addChild(target, 1);
+			target->setTag(1);
+			m->towers.pushBack(target);			
+		}
+		else if(towerType == "MissleGunTower" || towerType == "Mi") {
+			_numCollected = _numCollected - 5;
+			_hud->numCollectedChanged(_numCollected);
+			target = MissleGunTower::tower();
+			target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
+			this->addChild(target, 1);
+			target->setTag(1);
+			m->towers.pushBack(target);
+		}
+		else {
+			return;
+		}
 	}
 	else
 	{
 		log("Tile Not Buildable");
 	}
+	
 }
 
 Point Level1::boundLayerPos(Point newPos)
@@ -378,12 +378,20 @@ Point Level1::boundLayerPos(Point newPos)
 }
 
 void Level1::update(float dt) {
+	// MachineGun
 	DataModel *m = DataModel::getModel();
 	Vector<Projectile*> projectilesToDelete;
+	//Level1 *l = ;
+
+	int c = 0;
 
 	for each(Projectile *projectile in m->projectiles)
-		// for (int i = 0; i < m->projectiles.size(); i++) // Use these code if your VC doesn’t support C++11.
+		// for (int i = 0; i < m->projectiles.size(); ++i) // Use these code if your VC doesn’t support C++11.
 	{
+		// auto projectile = m->projectiles.at(i);
+		// auto projectileSprite = projectile->projectileSprite;
+		// int curAttackDamage = projectile->attackDamage;
+
 		// Projectile* projectile = (Projectile*)(m->projectiles.at(i)); // Use these code if your VC doesn’t support C++11.
 		Rect projectileRect = Rect(projectile->getPositionX() - (projectile->getContentSize().width / 2),
 			projectile->getPositionY() - (projectile->getContentSize().height / 2),
@@ -393,7 +401,7 @@ void Level1::update(float dt) {
 		Vector<Creep*> targetsToDelete;
 
 		for each(Creep *target in m->targets)
-			// for (int i = 0; i < m->targets.size(); i++) // Use these code if your VC doesn’t support C++11.
+			// for (int i = 0; i < m->targets.size(); ++i) // Use these code if your VC doesn’t support C++11.
 		{
 			// Creep* target = (Creep*)(m->targets.at(i)); // Use these code if your VC doesn’t support C++11.
 
@@ -407,27 +415,61 @@ void Level1::update(float dt) {
 				projectilesToDelete.pushBack(projectile);
 
 				Creep *creep = target;
+				// **NB Changes needed here to have different projectile damages
+				// float attackDamage = projectile->attackDamage;
+				// CCLOG("Projectile Attack Damage is : %f" , projectile->attackDamage);
+				// float curAttackDamage = projectile->attackDamage;
+
+
+				// creep->curHp -= projectile->attackDamage;
 				creep->curHp -= 1;
 
 				if (creep->curHp <= 0)
 				{
 					targetsToDelete.pushBack(creep);
+					//GameHUD* score = (GameHUD*)(c);
+
+					//m->_score=score;
 				}
 				break;
 			}
 		}
 
-		//for each(Creep *target in targetsToDelete)
-		for (int i = 0; i < targetsToDelete.size(); i++)
+		//for(auto target : targetsToDelete)
+
+		for (int i = 0; i < targetsToDelete.size(); ++i)
 		{
 			Creep* target = (Creep*)(targetsToDelete.at(i));
 
+			totalCreepsLeft--;
+
 			m->targets.eraseObject(target);
 			this->removeChild(target, true);
+			//count++;
+			_numCollected++;
+			_hud->numCollectedChanged(_numCollected);
+
+			// If you've killed all the creeps, change scene
+			if (totalCreepsLeft == 0)
+			{
+				auto loadMenu = StartMenu::createScene();
+				//DataModel *m = DataModel::getModel();
+				// Director::getInstance()->popScene();
+				// Director::getInstance()->pushScene((1, loadMenu));
+				Director::getInstance()->replaceScene(TransitionScene::create(2, loadMenu));
+				/*m->waypoints.clear();
+				m->targets.clear();
+				m->waves.clear();
+				m->towers.clear();    // We will deal with it later.
+				m->projectiles.clear();  // We will deal with it later.
+				*/
+			}
+
+			//CCLOG("COIN = %i", count);
 		}
 	}
 
-	for each(Projectile *projectile in projectilesToDelete)
+	for(auto *projectile : projectilesToDelete)
 		// for (int i =0; i < projectilesToDelete.size(); i++) // Use these code if your VC doesn’t support C++11.
 	{
 		// Projectile* projectile = (Projectile*)(projectilesToDelete.at(i)); // Use these code if your VC doesn’t support C++11.
@@ -437,5 +479,23 @@ void Level1::update(float dt) {
 	}
 }
 
-//  #endif
+/*void Level1::onEnter()
+{
+	
+}
 
+void Level1::onExit()
+{
+	DataModel *m = DataModel::getModel();
+	m->waypoints.clear();
+	m->targets.clear();
+	m->waves.clear();
+	m->towers.clear();    // We will deal with it later.
+	m->projectiles.clear();  // We will deal with it later.
+
+	this->unscheduleAllSelectors();
+	this->release();
+	// CCTextureCache sharedTextureCache[removeAllTextures];
+}*/
+
+//  #endif

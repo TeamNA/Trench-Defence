@@ -1,5 +1,6 @@
 #include "HelloWorldScene.h"
 #include "StartMenuScene.h"
+#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 
@@ -56,12 +57,12 @@ bool HelloWorld::init()
 
     // add a label shows "Hello World"
     // create and initialize a label
-    
-    auto label = Label::createWithTTF("Presents...", "fonts/Marker Felt.ttf", 24);
-    
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("Accept.mp3");
+	auto label = Label::createWithTTF("Presents", "fonts/ARMYRUST.ttf", 34);
+
     // position the label on the center of the screen
     label->setPosition(Vec2(origin.x + visibleSize.width*0.8,
-                            origin.y + visibleSize.height*0.2));
+                            origin.y + visibleSize.height*0.05));
 
 	// change the colour of the label to grey
 	label->setColor(ccc3(84,84,84));
@@ -89,7 +90,7 @@ bool HelloWorld::init()
 }
 
 void HelloWorld::onEnter() {
-	CCLayer::onEnter();
+	Layer::onEnter();
 	// CCLog("onEnter");
 	printf("onEnter");
 	this->scheduleOnce(schedule_selector(HelloWorld::finishSplash), 1.0f);
