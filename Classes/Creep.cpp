@@ -43,13 +43,26 @@ Creep* FastRedCreep::creep()
 	// run it and repeat it forever
 	creep->runAction(RepeatForever::create(animate));
 	//rotate
-	auto rotateTo = RotateTo::create(2.0f, 40.0f);
+	auto rotateTo = RotateTo::create(4.0f, 80.0f);
 
 	creep->runAction(rotateTo);
 
 	// Rotates a Node clockwise by 40 degree over 2 seconds
 	auto rotateBy = RotateBy::create(2.0f, 40.0f);
 	creep->runAction(rotateBy);
+
+	//fade in
+	auto fadeIn = FadeIn::create(5.0f);
+
+	// Tints a node to the specified RGB values
+	auto tintTo = TintTo::create(2.0f, 120.0f, 232.0f, 254.0f);
+	creep->runAction(tintTo);
+
+	// Tints a node BY the delta of the specified RGB values.
+	auto tintBy = TintBy::create(2.0f, 122.0f, 121.0f, 101.0f);
+	creep->runAction(tintBy);
+	creep->runAction(fadeIn);
+
 	creep->setScale(0.3);
 	creep->addChild(creep->sprite, 0);
 	creep->curHp = 10;
@@ -81,15 +94,25 @@ Creep* StrongGreenCreep::creep()
 	Animate* animate = Animate::create(animation);
 	// run it and repeat it forever
 	creep->runAction(RepeatForever::create(animate));
-	
+
 	//rotate
-	auto rotateTo = RotateTo::create(2.0f, 40.0f);
+	auto rotateTo = RotateTo::create(6.0f, 80.0f);
 	creep->runAction(rotateTo);
 	// Rotates a Node clockwise by 40 degree over 2 seconds
 	auto rotateBy = RotateBy::create(2.0f, 40.0f);
-	auto fadeIn = FadeIn::create(5.0f);
-	creep->runAction(fadeIn);
 	creep->runAction(rotateBy);
+
+	//fade in
+	auto fadeIn = FadeIn::create(5.0f);
+
+	// Tints a node to the specified RGB values
+	auto tintTo = TintTo::create(2.0f, 120.0f, 232.0f, 254.0f);
+	creep->runAction(tintTo);
+
+	// Tints a node BY the delta of the specified RGB values.
+	auto tintBy = TintBy::create(2.0f, 122.0f, 121.0f, 101.0f);
+	creep->runAction(tintBy);
+	creep->runAction(fadeIn);
 	creep->setScale(0.3);
 	creep->addChild(creep->sprite, 0);
 	creep->curHp = 30;
