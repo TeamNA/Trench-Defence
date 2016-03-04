@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="25" tilewidth="20" tileheight="20" nextobjectid="34">
+ <tileset firstgid="1" name="tiles3" tilewidth="20" tileheight="20" tilecount="1024">
+  <image source="SpritePack/Tiles/tiles3.png" width="640" height="640"/>
+  <terraintypes>
+   <terrain name="Map" tile="-1"/>
+  </terraintypes>
+  <tile id="32" terrain="0,0,0,0"/>
+  <tile id="46">
+   <properties>
+    <property name="buildable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="256" terrain="0,0,0,0"/>
+ </tileset>
+ <tileset firstgid="1025" name="Sources" tilewidth="20" tileheight="20" spacing="1" margin="1" tilecount="874">
+  <image source="Sources.png" width="500" height="800"/>
+ </tileset>
+ <tileset firstgid="1899" name="Quicksand" tilewidth="20" tileheight="20" spacing="1" margin="1" tilecount="576">
+  <image source="quicksand.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="2475" name="Misc" tilewidth="20" tileheight="20" spacing="1" margin="1" tilecount="135">
+  <image source="Misc.png" width="200" height="315"/>
+ </tileset>
+ <layer name="Background" width="40" height="25">
+  <properties>
+   <property name="MAP" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzNlzkOwjAQRScoFwkSBRW34jTs5wjbPcLWsJQ0SEgEOALfki2RiCS28VY8xZoiPI3nj0ISEbUDJgJ3KtLhuKoPOEMwAmMwAVNq9jN1rvNLud8xJjqBM7jERT8bTrLnjLvJ+vUM/XbVe8p10TtWf+L5Am8wk+ifKde6s/DLY3U/nX7o+OU/7lfVz2b/GP3S/YaSD5Ff5leVD9tzVjcbYveV/f65X5OzaMPP9Pzp+rncL8xPuIW0n1k+cr6fRXZ18mtr/2XU/H3gMx8PCT+f+0XGz2d+Vf2+cVGv87u2iG6ekemfT0L3U/3/4ZqUMwcLsAQrsA7EL+NswBbswB4cQAK/bsB8AIX0Cwo=
+  </data>
+ </layer>
+ <objectgroup name="WayPointList" visible="0">
+  <object id="1" name="Waypoint0" x="18" y="362" width="20" height="21"/>
+  <object id="2" name="Waypoint1" x="19" y="37" width="21" height="23"/>
+  <object id="3" name="Waypoint2" x="79" y="41" width="21" height="20"/>
+  <object id="4" name="Waypoint3" x="79" y="362" width="22" height="18"/>
+  <object id="5" name="Waypoint4" x="137" y="359" width="21" height="19"/>
+  <object id="6" name="Waypoint5" x="140" y="21" width="21" height="20"/>
+  <object id="7" name="Waypoint6" x="199" y="21" width="20" height="20"/>
+  <object id="8" name="Waypoint7" x="199" y="359" width="22" height="21"/>
+  <object id="9" name="Waypoint8" x="259" y="361" width="20" height="17"/>
+  <object id="10" name="Waypoint9" x="259" y="20" width="21" height="21"/>
+  <object id="11" name="Waypoint10" x="338" y="22" width="20" height="18"/>
+  <object id="12" name="Waypoint11" x="339" y="358" width="20" height="22"/>
+  <object id="19" name="Waypoint13" x="387" y="31"/>
+  <object id="20" name="Waypoint14" x="449" y="38"/>
+  <object id="21" name="Waypoint15" x="453" y="367"/>
+  <object id="22" name="Waypoint16" x="513" y="357"/>
+  <object id="23" name="Waypoint17" x="512" y="38"/>
+  <object id="24" name="Waypoint18" x="566" y="38"/>
+  <object id="25" name="Waypoint19" x="573" y="372"/>
+  <object id="26" name="Waypoint20" x="629" y="361"/>
+  <object id="27" name="Waypoint21" x="632" y="29"/>
+  <object id="28" name="Waypoint22" x="690" y="35"/>
+  <object id="29" name="Waypoint23" x="691" y="382"/>
+  <object id="30" name="Waypoint24" x="754" y="362"/>
+  <object id="31" name="Waypoint25" x="750" y="32"/>
+  <object id="32" name="Waypoint26" x="773" y="23"/>
+  <object id="33" name="Waypoint12" x="385" y="370"/>
+ </objectgroup>
+ <objectgroup name="Enemy" visible="0">
+  <object id="13" name="EnemySpawnPoint" x="16" y="361" width="24" height="26"/>
+ </objectgroup>
+ <layer name="Sources" width="40" height="25">
+  <data encoding="base64" compression="zlib">
+   eJzNVktOG0EQ9WJ8EcCswyYSJGyZYYFEAmu7HYEEydqa8SUGOITFJZJ4AVyCa+QCqZarxOOpqg0bJ5aeprtcPfXqOz0Y/PvfczUYPAgeBU+AP4Ik+KaYCm4EH4YrJN3n/zpHfie4DeSs34EdlJtdlmfZSNatPOeKjvi1up+TvZb41Y6c9Tuwk2U12O5Ajvoj8G1vuEJSe7Wu0ad1657ktSNfqHzsvAftGr9WY5C5NbpvnDMt+YcxqME22mtIXsN6RmfRH+M0Ut/m+q4J+Gq2j53zCXRSwI9j5q1T4HNSTiPVz7GcKL8F8UjAtXHe5cnZn3snv+wbx4/rbwL1h36Uao51eopHxG/s1B/Hz/JruTZ+Xk1wnb01v8gPdWZaf6X4WX6t/oxfX4gfno94Iw/Uf2/9WX6x/vac+vP4WW9y/Lze9/hF88vrX8s115+dOXbiFM2XqP64l0v1Z3Ytv5Zrr/5a7V8vfhYDrLMFcYr4Yf2ti19P+e0pR16cuFaieuD5zGue+fgeix/nl89zzXl93Tj6XAPMz2If9QrOF8xvNPOi7xvPP44959rk42Hc4zj/ovlcmsPRdzlV8bck6oNojf2B+c2+5jtSvn/d0Zlp9fquZvzsfoR3qkVVvpvNq5e7XA08pvrk+0Hm1wC/TlETD+OC/dvp+1Df+LG8J94ox7ugxe+nPH9XL/cD2xuO9DzKl478l+Kt+ss1+kvltyXYFuwMV/vdDe5LeobM70DwSfBZcLjBfUnP+O0Lvgi+Cs4E5xvcl/SM36ngSnAt+C74scF9Sc/4/Q+/j8LjQnCiyOtLff4Fao1Mtw==
+  </data>
+ </layer>
+ <layer name="Quicksand" width="40" height="25">
+  <data encoding="base64" compression="zlib">
+   eJzt1qEOgDAMhOG68f7PxhBAwgsMBJBgOYkpYakh8H/JmbabPrP3axuzrHTKlPxd7V+R+VXRblYW5Uj+7gnvvnYOAADwJb26zqCMwQ4X6Xx3Vr3blD3Y4eh8wL+dD9U4pQ==
+  </data>
+ </layer>
+ <layer name="Misc" width="40" height="25">
+  <data encoding="base64" compression="zlib">
+   eJzt1kEOwiAQBdAucNFTePruqYlLVy7degwOYUkkjp8/FGiLbeJPmpiRwutQiV233zz6uGan2vi+WN1nMJ+6HCfrWnDuCzEs8fkLfc7EdWap9YV7bB/7nOG+UdzrTDx+zhfq0nc+pX3osP33eg5c6MPPpb4rjG3pw1pN/3B/pQ/3scQ3kNqcz89T4sP+MTd7hlof65/PL3024/3DfqZ8bE+ZL3WVnC85vrB+ri/lxP5pPjlXyifXP7pv7myp9cn7NZ/PFj7tfM7pH76jaGJ9Tdm22l/m0/rGfJg1f79sjIzmSNVrfCHSh2enth4+Rysfho0PNe1Zan1r5Zbx/xnT0leTv29Zjux77tx3n757ASXIQ4A=
+  </data>
+ </layer>
+</map>

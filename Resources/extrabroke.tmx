@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="25" tilewidth="20" tileheight="20" nextobjectid="14">
+ <tileset firstgid="1" name="tiles3" tilewidth="20" tileheight="20" tilecount="1024">
+  <image source="SpritePack/Tiles/tiles3.png" width="640" height="640"/>
+  <terraintypes>
+   <terrain name="Map" tile="-1"/>
+  </terraintypes>
+  <tile id="32" terrain="0,0,0,0"/>
+  <tile id="46">
+   <properties>
+    <property name="buildable" value="1"/>
+   </properties>
+  </tile>
+  <tile id="256" terrain="0,0,0,0"/>
+ </tileset>
+ <tileset firstgid="1025" name="Mud" tilewidth="20" tileheight="20" spacing="1" margin="1" tilecount="870">
+  <image source="../../../../../Users/shane_000/Desktop/Trench Def/Assests/mud.png" width="640" height="610"/>
+ </tileset>
+ <tileset firstgid="1895" name="LightMud" tilewidth="20" tileheight="20" spacing="1" margin="1" tilecount="576">
+  <image source="../../../../../Users/shane_000/Desktop/Trench Def/Assests/7285.jpg" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="2471" name="Darkmud" tilewidth="20" tileheight="20" spacing="1" margin="1" tilecount="870">
+  <image source="../../../../../Users/shane_000/Desktop/Trench Def/Assests/Darkmud.png" width="640" height="610"/>
+ </tileset>
+ <tileset firstgid="3341" name="Black" tilewidth="20" tileheight="20" spacing="1" margin="1" tilecount="361">
+  <image source="../../../../../Users/shane_000/Desktop/Trench Def/Assests/Black.png" width="400" height="400"/>
+ </tileset>
+ <tileset firstgid="3702" name="Black&amp;Gray" tilewidth="20" tileheight="20" spacing="1" margin="1" tilecount="361">
+  <image source="../../../../../Users/shane_000/Desktop/Trench Def/Assests/Black&amp;Gray.png" width="400" height="400"/>
+ </tileset>
+ <tileset firstgid="4063" name="Black&amp;Gray2" tilewidth="20" tileheight="20" spacing="1" margin="1" tilecount="361">
+  <image source="../../../../../Users/shane_000/Desktop/Trench Def/Assests/Black&amp;Gray2.png" width="400" height="400"/>
+ </tileset>
+ <tileset firstgid="4424" name="MudGrey" tilewidth="20" tileheight="20" spacing="1" margin="1" tilecount="576">
+  <image source="../../../../../Users/shane_000/Desktop/Trench Def/Assests/MudGrey.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="5000" name="MudsideGrey" tilewidth="20" tileheight="20" spacing="1" margin="1" tilecount="576">
+  <image source="../../../../../Users/shane_000/Desktop/Trench Def/Assests/MudsideGrey.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="5576" name="mud+grey" tilewidth="20" tileheight="20" spacing="1" margin="1" tilecount="870">
+  <image source="../../../../../Users/shane_000/Desktop/Trench Def/Assests/mud+grey.png" width="640" height="610"/>
+ </tileset>
+ <tileset firstgid="6446" name="Level1" tilewidth="20" tileheight="20" spacing="1" margin="1" tilecount="81">
+  <image source="../../../../../Users/shane_000/Desktop/Trench Def/Assests/Level1.png" width="200" height="200"/>
+ </tileset>
+ <layer name="Background" width="40" height="25">
+  <properties>
+   <property name="MAP" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzNl01IVFEUx28t3nMWY5NO79HK1MyPhUNpTp+bIsv8GPsuslILXNa2sMbaJ23EkKIgaFO7cJiKXBYFrhQnqG0EWUpCgZbV/3Dv7d05856Mzsbgx/zfv/Pm/TvvnmOWrxGiYpVRB/SfwVIhpouE+Aq+KaqEJFOU/XfaN73MEvX9lhDXrNz65/Be+Phn4XWBL1488Rj5krbHgO09b7aoMD2CZ921pNaZSGfw+V7pakeIGkfqq+rfY+YbQ75xO7sHWtuhwjT1L2VJrTOR/oHPn0ofQLZmR2q//k0h3yfWs5jSZcbzVqKpf5OW1DoTad1L0heR7ZIjtV//6Pwt2v49iIe8rHHm56PTeNacJXUpnhG1pda9JH0T2W45Ug+r88DPn5nP7EGC6dgK/Igt9VZ8blNa95L0A2R76Eg9qs4DP39mPrMHfQVqelf1ttR0Fok+o5ekXyHbmCP1hDoP/PyZ82H2IFmgpnfVZks9ovIljV6S/oBsHx2pv6vzYOabUfOh3xHfZ1oPh5bvp1Q/yE+rfMOh7GfNI9uCIzX5/P1a0ez3G7TPMsyPBdSb/qSaR+33K70PefY7uX6vI+eZz+9owPyaenYFe3FOzaNtnD/S3cjQo3aezkR6wJHzzOd3PGB+y4x3YYeCa4I0zW5K7Tmdj/QNOm9q5+lMZSH//o2x/Ry088xn57v/aHYn1Z7T80H6HjLcVztPZ4oH9G+KvV++w/xyL2f/zak9p+dD+1rrTNrn8zHD8gXtswTzYwH1pk8ZIrbn6/2ne8b9IZ/9R/NL5++yK8QVN3eHab8vwOf1DfAaXW/n1du59bpn3B/y2X8v1fm7jZpBN3ufkdZ+MsDn9UfgHVV+Wu1nXk9+2sr1n6l+m/km1M+3J6h56ub+X1D7dL+fz+v/9yPge/R10PcMsHzTyDdfIsRb1LwDv6EXS6S3YPim98vwTY/ufQ3vjetd+33PnyX8v+DzWi/f9WIhwmEhisE6EAHrQQkoBVGwATjADedfy+vM68MbhWgFbaAddIAE6ASVkez+3UG+TbinHFSASrAZVIEtoBrUgFpQF86/lteZ18eQ4zg4AU6CU+A0OAOaWL5HyNeAexrBdtAE4mAH2Al2gd1gD9gbzr+W15nXXchxDpwHF0A36AG9oIXlSyFfM+45CA6BFuo/aAVtoB10gAToDOdfy+vyva+L5SvH75q1qwzz999/w02Ijg==
+  </data>
+ </layer>
+ <objectgroup name="WayPointList">
+  <object id="1" name="Waypoint0" x="18" y="362" width="20" height="21"/>
+  <object id="2" name="Waypoint1" x="19" y="37" width="21" height="23"/>
+  <object id="3" name="Waypoint2" x="79" y="41" width="21" height="20"/>
+  <object id="4" name="Waypoint3" x="79" y="362" width="22" height="18"/>
+  <object id="5" name="Waypoint4" x="137" y="359" width="21" height="19"/>
+  <object id="6" name="Waypoint5" x="140" y="21" width="21" height="20"/>
+  <object id="7" name="Waypoint6" x="199" y="21" width="20" height="20"/>
+  <object id="8" name="Waypoint7" x="199" y="359" width="22" height="21"/>
+  <object id="9" name="Waypoint8" x="259" y="361" width="20" height="17"/>
+  <object id="10" name="Waypoint9" x="259" y="20" width="21" height="21"/>
+  <object id="11" name="Waypoint10" x="338" y="22" width="20" height="18"/>
+  <object id="12" name="Waypoint11" x="339" y="358" width="20" height="22"/>
+ </objectgroup>
+ <objectgroup name="Enemy">
+  <object id="13" name="EnemySpawnPoint" x="16" y="361" width="24" height="26"/>
+ </objectgroup>
+ <layer name="MudLayer" width="40" height="25">
+  <data encoding="base64" compression="zlib">
+   eJztVoEJwjAQrJJ2ABdQOoELCJ3ABQqdwAUEJ3ABwTkqOEcF54jQAezTPD3SPC3YRAo9KPkGJMfd5WwUzQ9KRdFK9ffLpH3G7vtC2nDbGn7EVZm5StrH5iTtTwnSa214ZM16UB3XVHVn6wFOvviRXjvwNAeuGejHZ+sRXKcE6kdcz8CV/dUCDx1YP5pvZr6Dv8yFgJrxu09+tn4P4JdB/lAnLcwh9HuZ+dmsheP+Yhaleei8X7hy/72b9QL5w8xVwuyDn+0v/75WrceE0sqcBk4a9kP4y/23iVuP+VxXzv5xf3PQ/+3ov1LwN8T9JXD/kbe1o/+qxO2v3TtT8mP9Uqv/yGOGdnhKcP2vTAm8sxn0H2VvH3cckJPkqa9vGb6zBfQfZe8Yd3z+9f2C+lHffaBfToaflLMQ+cPOQ1D2rnF/X8qZr/wtWLBgfvgCjmqFgQ==
+  </data>
+ </layer>
+</map>

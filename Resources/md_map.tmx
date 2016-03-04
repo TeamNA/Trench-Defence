@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="20" tileheight="20" nextobjectid="46">
+ <tileset firstgid="1" name="tiles2" tilewidth="20" tileheight="20" tilecount="1024" columns="32">
+  <image source="SpritePack/Tiles/tiles2.png" width="640" height="640"/>
+ </tileset>
+ <tileset firstgid="1025" name="tiles1" tilewidth="20" tileheight="20" tilecount="1024" columns="32">
+  <image source="SpritePack/Tiles/tiles1.png" width="640" height="640"/>
+ </tileset>
+ <tileset firstgid="2049" name="tiles3" tilewidth="20" tileheight="20" tilecount="1024" columns="32">
+  <image source="SpritePack/Tiles/tiles3.png" width="640" height="640"/>
+ </tileset>
+ <tileset firstgid="3073" name="EnemyWasp" tilewidth="20" tileheight="20" tilecount="1" columns="1">
+  <image source="EnemyWasp.png" width="20" height="20"/>
+ </tileset>
+ <layer name="Background" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxTZWZgUKUiZmRgYGACYWbKcDIQczGOmjdq3qh5o+aNmscMZLCTiTmAmJMRYp4iECsBsTKFWBOItYAYAKTBE5Q=
+  </data>
+ </layer>
+ <layer name="Border" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxTZGVgUKISVgZiRyCmBnAGmuM1at6oeaPmjZo3ah7VzGsE4iYq4WYgBgBEJh0j
+  </data>
+ </layer>
+ <layer name="Walls" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYKA9eMQCwcSKEzKDVPaoeaPmjZo3at5AmUeJOLo8qZjWAADexJxV
+  </data>
+ </layer>
+ <layer name="Turrets" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFtATcHAwMPBzUM08baJYOFc3zBprlQ0XzBgsYyeE+Evw+Evw4FAAAnqAE1Q==
+  </data>
+ </layer>
+ <objectgroup name="Turret1SpawnPoint">
+  <object id="2" x="46" y="317" width="18" height="26"/>
+ </objectgroup>
+ <objectgroup name="Turret2SpawnPoint">
+  <object id="3" x="46" y="202" width="19" height="22"/>
+  <object id="4" x="541" y="327"/>
+ </objectgroup>
+ <objectgroup name="PlayerBase"/>
+ <objectgroup name="WayPointList">
+  <object id="15" name="Waypoint7" x="199" y="336" width="24" height="23"/>
+  <object id="10" name="Waypoint2" x="78" y="21" width="21" height="21"/>
+  <object id="9" name="Waypoint1" x="18" y="21" width="22" height="22"/>
+  <object id="13" name="Waypoint5" x="140" y="23" width="21" height="20"/>
+  <object id="24" name="Waypoint11" x="347" y="364"/>
+  <object id="12" name="Waypoint4" x="137" y="337" width="23" height="22"/>
+  <object id="17" name="Waypoint9" x="259" y="22" width="22" height="22"/>
+  <object id="14" name="Waypoint6" x="198" y="19" width="23" height="23"/>
+  <object id="18" name="Waypoint10" x="336" y="22" width="24" height="23"/>
+  <object id="1" name="Waypoint0" x="18" y="361" width="21" height="21"/>
+  <object id="11" name="Waypoint3" x="80" y="335" width="22" height="24"/>
+  <object id="16" name="Waypoint8" x="258" y="338" width="22" height="21"/>
+ </objectgroup>
+ <objectgroup name="Enemy">
+  <properties>
+   <property name="EnemySpawnPoint" value=""/>
+  </properties>
+  <object id="44" name="EnemySpawnPoint" x="17" y="358" width="22" height="25"/>
+ </objectgroup>
+</map>
