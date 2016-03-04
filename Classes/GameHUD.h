@@ -22,8 +22,11 @@ public:
 	void onTouchEnded(Touch* touch, Event* event);
 
 	void numCollectedChanged(int numCollected);
+	void scCollectedChanged(int scCollected);
 
 private:
-	cocos2d::Label *scoreLabel;
+	cocos2d::Label *coinLabel;
 	LabelTTF *_label;
+	cocos2d::Label *scoreLabel;
+	LabelTTF *_label2;
 };

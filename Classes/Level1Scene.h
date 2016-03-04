@@ -40,6 +40,8 @@ public:
 	Point boundLayerPos(Point newPos);
 	int getCount() { return count; };
 	void setCount(int c) { count = c; };
+	int getSCount() { return count; };
+	void setSCount(int s) { count = s; };
 
 	Point position;
 	GameHUD *gameHUD;
@@ -60,6 +62,7 @@ private:
 	cocos2d::Label *scoreLabel;
 	GameHUD *_hud;
 	int _numCollected = 5;
+	int _scCollected = 0;
 };
 
 #endif

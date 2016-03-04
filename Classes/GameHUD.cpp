@@ -28,6 +28,10 @@ bool GameHUD::init()
 	_label->initWithString("5", "Verdana-Bold", 18.0);
 	_label->setColor(ccc3(0, 0, 0));
 
+	_label2 = new CCLabelTTF();
+	_label2->initWithString("0", "Verdana-Bold", 18.0);
+	_label2->setColor(ccc3(0, 0, 0));
+
 	// Draw the background of the game HUD
 	Texture2D::setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_RGBA8888);
 	background = Sprite::create("hud.png");
@@ -45,7 +49,7 @@ bool GameHUD::init()
 
 	// Create a vector of strings to take in the names of the turrets for the HUD
 	Vector<String*> images;
-	images.pushBack(StringMake("MachineGunTurret.png"));
+	images.pushBack(StringMake("MachineGun.png"));
 	images.pushBack(StringMake("FastMachineGunTurret.png"));
 	images.pushBack(StringMake("MissleGunTurret.png"));
 
@@ -66,8 +70,11 @@ bool GameHUD::init()
 	}
 
 	// Add the coins label to the hud and set its posiion
-	LabelTTF* ttf1 = LabelTTF::create("COINS = ", "Helvetica", 8,
+	LabelTTF* ttf1 = LabelTTF::create("COINS = ", "ARMYRUST", 18,
 		CCSizeMake(245, 32), kCCTextAlignmentCenter);
+	LabelTTF* ttf2 = LabelTTF::create("SCORE = ", "ARMYRUST", 18,
+		CCSizeMake(245, 32), kCCTextAlignmentCenter);
+
 
 	//scoreLabel = Label::create(tempscore->getCString(), "Helvetica", 12,
 	//CCSizeMake(245, 32), kCCTextAlignmentCenter);
@@ -75,10 +82,16 @@ bool GameHUD::init()
 	ttf1->setPosition(Vec2(winSize.width - 90, visibleSize.height*(0.08) + origin.y));
 	ttf1->setColor(ccc3(0, 0, 0));
 	_label->setPosition(Vec2(winSize.width - 50, visibleSize.height*(0.10) + origin.y));
+
+	ttf2->setPosition(Vec2(winSize.width - 185, visibleSize.height*(0.08) + origin.y));
+	ttf2->setColor(ccc3(0, 0, 0));
+	_label2->setPosition(Vec2(winSize.width - 140, visibleSize.height*(0.10) + origin.y));
 	//scoreLabel->setColor(ccc3(0, 0, 0));
 
 	this->addChild(ttf1);
+	this->addChild(ttf2);
 	this->addChild(_label);
+	this->addChild(_label2);
 
 	return true;
 }
@@ -170,7 +183,7 @@ void GameHUD::onTouchMoved(Touch* touch, Event* event)
 		DataModel *m = DataModel::getModel();
 		// Error here
 		Point touchLocationInGameLayer = m->_gameLayer->convertTouchToNodeSpace(touch);
-		
+
 		// small bool here?
 		BOOL isBuildable = m->_gameLayer->canBuildOnTilePosition(touchLocationInGameLayer);
 		if (isBuildable)
@@ -219,4 +232,12 @@ void GameHUD::numCollectedChanged(int numCollected)
 	String *labelCollected = new String();
 	labelCollected->initWithFormat("%d", numCollected);
 	_label->setString(labelCollected->getCString());
+}
+
+void GameHUD::scCollectedChanged(int scCollected)
+{
+	// This updates the score on the hud
+	String *scoreCollected = new String();
+	scoreCollected->initWithFormat("%d", scCollected);
+	_label2->setString(scoreCollected->getCString());
 }

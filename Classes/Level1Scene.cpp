@@ -17,7 +17,7 @@ Scene* Level1::createScene()
 	auto Level1Scene = Scene::create();
 
 	CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("short.wav", true);
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("War.wav", true);
 
 	// 'layer' is an autorelease object
 	auto layer = Level1::create();
@@ -42,8 +42,6 @@ Scene* Level1::createScene()
 	DataModel *m = DataModel::getModel();
 	m->_gameLayer = layer; // add this
 	layer->_hud = hud;
-
-
 
 	// return the scene
 	return Level1Scene;
@@ -246,7 +244,6 @@ void Level1::addTarget()
 	target->runAction(CCSequence::create(actionMove, actionMoveDone, NULL));
 	target->tag = 1;
 	m->targets.pushBack(target);
-
 }
 
 void Level1::gameLogic(float dt)
@@ -331,24 +328,27 @@ void Level1::addTower(Point pos, std::string towerType)
 		if (towerType == "MachineGunTower" || towerType == "Ma") {
 			_numCollected = _numCollected - 5;
 			_hud->numCollectedChanged(_numCollected);
+			_hud->scCollectedChanged(_scCollected);
 			target = MachineGunTower::tower();
 			target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
 			this->addChild(target, 1);
 			target->setTag(1);
 			m->towers.pushBack(target);
 		}
-		else if(towerType == "FastMachineGunTower" || towerType == "Fa") {
+		else if (towerType == "FastMachineGunTower" || towerType == "Fa") {
 			_numCollected = _numCollected - 5;
 			_hud->numCollectedChanged(_numCollected);
+			_hud->scCollectedChanged(_scCollected);
 			target = FastMachineGunTower::tower();
 			target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
 			this->addChild(target, 1);
 			target->setTag(1);
-			m->towers.pushBack(target);			
+			m->towers.pushBack(target);
 		}
-		else if(towerType == "MissleGunTower" || towerType == "Mi") {
+		else if (towerType == "MissleGunTower" || towerType == "Mi") {
 			_numCollected = _numCollected - 5;
 			_hud->numCollectedChanged(_numCollected);
+			_hud->scCollectedChanged(_scCollected);
 			target = MissleGunTower::tower();
 			target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
 			this->addChild(target, 1);
@@ -363,7 +363,7 @@ void Level1::addTower(Point pos, std::string towerType)
 	{
 		log("Tile Not Buildable");
 	}
-	
+
 }
 
 Point Level1::boundLayerPos(Point newPos)
@@ -384,6 +384,7 @@ void Level1::update(float dt) {
 	//Level1 *l = ;
 
 	int c = 0;
+	int s = 0;
 
 	for each(Projectile *projectile in m->projectiles)
 		// for (int i = 0; i < m->projectiles.size(); ++i) // Use these code if your VC doesn’t support C++11.
@@ -446,6 +447,8 @@ void Level1::update(float dt) {
 			m->targets.eraseObject(target);
 			this->removeChild(target, true);
 			//count++;
+			_scCollected++;
+			_hud->scCollectedChanged(_scCollected);
 			_numCollected++;
 			_hud->numCollectedChanged(_numCollected);
 
@@ -469,7 +472,7 @@ void Level1::update(float dt) {
 		}
 	}
 
-	for(auto *projectile : projectilesToDelete)
+	for (auto *projectile : projectilesToDelete)
 		// for (int i =0; i < projectilesToDelete.size(); i++) // Use these code if your VC doesn’t support C++11.
 	{
 		// Projectile* projectile = (Projectile*)(projectilesToDelete.at(i)); // Use these code if your VC doesn’t support C++11.
@@ -481,21 +484,19 @@ void Level1::update(float dt) {
 
 /*void Level1::onEnter()
 {
-	
-}
 
+}
 void Level1::onExit()
 {
-	DataModel *m = DataModel::getModel();
-	m->waypoints.clear();
-	m->targets.clear();
-	m->waves.clear();
-	m->towers.clear();    // We will deal with it later.
-	m->projectiles.clear();  // We will deal with it later.
-
-	this->unscheduleAllSelectors();
-	this->release();
-	// CCTextureCache sharedTextureCache[removeAllTextures];
+DataModel *m = DataModel::getModel();
+m->waypoints.clear();
+m->targets.clear();
+m->waves.clear();
+m->towers.clear();    // We will deal with it later.
+m->projectiles.clear();  // We will deal with it later.
+this->unscheduleAllSelectors();
+this->release();
+// CCTextureCache sharedTextureCache[removeAllTextures];
 }*/
 
 //  #endif
