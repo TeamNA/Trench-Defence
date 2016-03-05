@@ -21,12 +21,12 @@ public:
 	void onTouchMoved(Touch *touch, Event *event);
 	void onTouchEnded(Touch* touch, Event* event);
 
-	void numCollectedChanged(int numCollected);
-	void scCollectedChanged(int scCollected);
+	void numCoinsCollectedChanged(int numCoinsCollected);
+	void scoreCollectedChanged(int scoreCollected);
 
 private:
 	cocos2d::Label *coinLabel;
-	LabelTTF *_label;
+	LabelTTF *_coinLabel;
 	cocos2d::Label *scoreLabel;
-	LabelTTF *_label2;
+	LabelTTF *_scoreLabel;
 };

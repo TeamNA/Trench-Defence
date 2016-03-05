@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _tower_
+#define _tower_
+
 #include "cocos2d.h"
 #include "Creep.h"
 #include "Projectile.h"
@@ -21,7 +23,8 @@ public:
 	Sprite * selSpriteRange;
 	Creep* getClosestTarget();
 	Projectile* nextProjectile;
-
+	Projectile* *projectile();
+	
 	CREATE_FUNC(Tower);
 };
 
@@ -61,3 +64,5 @@ public:
 	void finishFiring();
 	void creepMoveFinished(Node* sender);
 };
+
+#endif

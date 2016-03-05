@@ -2,12 +2,15 @@
 #define  _DATAMODEL_H_
 
 #include "cocos2d.h"
+// #include <Vector>
 #include "base/CCVector.h"
 #include "WayPoint.h"
 #include "Creep.h"
 #include "Level1Scene.h"
+// #include "GameHUD.h" // Maybe comment out?
 #include "Tower.h" 
 #include "Projectile.h"
+// #include "Wave.h"
 
 USING_NS_CC;
 
@@ -22,7 +25,10 @@ public:
 	Vector<Creep*> targets;
 	Vector<Wave*> waves;
 	Vector<Tower*> towers;    // We will deal with it later.
-	Vector<Projectile*> projectiles;  // We will deal with it later.
+	Vector<Projectile*> projectiles;
+	// Vector<MachineGunProjectile*> machineGunProjectiles;  
+	// Vector<FastMachineGunProjectile*> fastMachineGunProjectiles;  
+	// Vector<MissleProjectile*> missleProjectiles;  
 	GameHUD* _gameHUDLayer;  // We will deal with it later.
 
 private:

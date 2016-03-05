@@ -1,5 +1,5 @@
-#ifndef __HISTROY_SCENE_H__
-#define __HISTROY_SCENE_H__
+#ifndef __HISTORY_SCENE_H__
+#define __HISTORY_SCENE_H__
 
 #include "cocos2d.h"
 
@@ -16,6 +16,7 @@ public:
 	void BackButtonPressed();
 	void MenuButtonPressed();
 	void startButtonPressed();
+	void settingsButtonPressed();
 
 	// a selector callback
 	void menuCloseCallback(cocos2d::Ref* pSender);
@@ -24,4 +25,4 @@ public:
 	CREATE_FUNC(HistoryScene);
 };
 
-#endif // __HISTROY_SCENE_H__
+#endif // __HISTORY_SCENE_H__

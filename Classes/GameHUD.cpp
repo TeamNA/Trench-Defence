@@ -24,13 +24,13 @@ bool GameHUD::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	_label = new CCLabelTTF();
-	_label->initWithString("5", "Verdana-Bold", 18.0);
-	_label->setColor(ccc3(0, 0, 0));
+	_coinLabel = new CCLabelTTF();
+	_coinLabel->initWithString("5", "Verdana-Bold", 18.0);
+	_coinLabel->setColor(ccc3(0, 0, 0));
 
-	_label2 = new CCLabelTTF();
-	_label2->initWithString("0", "Verdana-Bold", 18.0);
-	_label2->setColor(ccc3(0, 0, 0));
+	_scoreLabel = new CCLabelTTF();
+	_scoreLabel->initWithString("0", "Verdana-Bold", 18.0);
+	_scoreLabel->setColor(ccc3(0, 0, 0));
 
 	// Draw the background of the game HUD
 	Texture2D::setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_RGBA8888);
@@ -38,36 +38,18 @@ bool GameHUD::init()
 	background->setScaleX(2.3);
 	background->setScaleY(1.95);
 
-	auto mySprite = Sprite::create("invisible2.png");
-	mySprite->setPosition(Vec2(visibleSize.width / 11.0 + origin.x, visibleSize.height*0.02 + origin.y));
-	// now lets animate the sprite we moved
-
-	Vector<SpriteFrame*> animFrames;
-	animFrames.reserve(12);
-	animFrames.pushBack(SpriteFrame::create("Flag2.png", Rect(0, 0, 65, 81)));
-	animFrames.pushBack(SpriteFrame::create("Flag1.png", Rect(0, 0, 65, 81)));
-	animFrames.pushBack(SpriteFrame::create("Flag3.png", Rect(0, 0, 65, 81)));
-
-	// create the animation out of the frames
-	Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
-	Animate* animate = Animate::create(animation);
-
-	// run it and repeat it forever
-	mySprite->runAction(RepeatForever::create(animate));
-
 	// Create an anchor point at the bottom of the screen to put the hud box
 	// ignoreAnchorPointForPosition(false);
 	// background->setAnchorPoint(Vec2(0.5, 0.5));
 	// background->setPosition(Vec2(0.5, 1));
 	background->setPosition(Point(visibleSize.width*(0.28) + origin.x, visibleSize.height*(0.1) + origin.y));
 	this->addChild(background);
-	this->addChild(mySprite);
 	//CCTexture2D::setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_Default);
 
 
 	// Create a vector of strings to take in the names of the turrets for the HUD
 	Vector<String*> images;
-	images.pushBack(StringMake("MachineGun.png"));
+	images.pushBack(StringMake("MachineGunTurret.png"));
 	images.pushBack(StringMake("FastMachineGunTurret.png"));
 	images.pushBack(StringMake("MissleGunTurret.png"));
 
@@ -88,29 +70,28 @@ bool GameHUD::init()
 	}
 
 	// Add the coins label to the hud and set its posiion
-	LabelTTF* ttf1 = LabelTTF::create("COINS = ", "fonts/ARMYRUST.ttf", 18,
+	LabelTTF* coins_ttf1 = LabelTTF::create("COINS = ", "ARMYRUST", 18,
 		CCSizeMake(245, 32), kCCTextAlignmentCenter);
-	//Add the score label to the hud and set its posiion
-	LabelTTF* ttf2 = LabelTTF::create("SCORE = ", "fonts/ARMYRUST.ttf", 18,
+	LabelTTF* score_ttf2 = LabelTTF::create("SCORE = ", "ARMYRUST", 18,
 		CCSizeMake(245, 32), kCCTextAlignmentCenter);
 
 
 	//scoreLabel = Label::create(tempscore->getCString(), "Helvetica", 12,
 	//CCSizeMake(245, 32), kCCTextAlignmentCenter);
 
-	ttf1->setPosition(Vec2(winSize.width - 90, visibleSize.height*(0.08) + origin.y));
-	ttf1->setColor(ccc3(0, 0, 0));
-	_label->setPosition(Vec2(winSize.width - 50, visibleSize.height*(0.10) + origin.y));
+	coins_ttf1->setPosition(Vec2(winSize.width - 80, visibleSize.height*(0.08) + origin.y));
+	coins_ttf1->setColor(ccc3(0, 0, 0));
+	_coinLabel->setPosition(Vec2(winSize.width - 30, visibleSize.height*(0.10) + origin.y));
 
-	ttf2->setPosition(Vec2(winSize.width - 185, visibleSize.height*(0.08) + origin.y));
-	ttf2->setColor(ccc3(0, 0, 0));
-	_label2->setPosition(Vec2(winSize.width - 140, visibleSize.height*(0.10) + origin.y));
+	score_ttf2->setPosition(Vec2(winSize.width - 225, visibleSize.height*(0.08) + origin.y));
+	score_ttf2->setColor(ccc3(0, 0, 0));
+	_scoreLabel->setPosition(Vec2(winSize.width - 160, visibleSize.height*(0.10) + origin.y));
 	//scoreLabel->setColor(ccc3(0, 0, 0));
 
-	this->addChild(ttf1);
-	this->addChild(ttf2);
-	this->addChild(_label);
-	this->addChild(_label2);
+	this->addChild(coins_ttf1);
+	this->addChild(score_ttf2);
+	this->addChild(_coinLabel);
+	this->addChild(_scoreLabel);
 
 	return true;
 }
@@ -170,7 +151,7 @@ bool GameHUD::onTouchBegan(Touch *touch, Event *event)
 			selSpriteRange->setPosition(sprite->getPosition());
 
 			newSprite = Sprite::createWithTexture(sprite->getTexture()); //sprite;
-			// newSprite = Sprite::createWithSpriteFrameName(sprite->getName());
+																		 // newSprite = Sprite::createWithSpriteFrameName(sprite->getName());
 			newSprite->setPosition(sprite->getPosition());
 			newSprite->setScale(0.6);
 			newSprite->setName(sprite->getName());
@@ -245,18 +226,18 @@ void GameHUD::onTouchEnded(Touch* touch, Event* event)
 
 }
 
-void GameHUD::numCollectedChanged(int numCollected)
+void GameHUD::numCoinsCollectedChanged(int numCoinsCollected)
 {
 	// This updates the number of coins collects on the hud
 	String *labelCollected = new String();
-	labelCollected->initWithFormat("%d", numCollected);
-	_label->setString(labelCollected->getCString());
+	labelCollected->initWithFormat("%d", numCoinsCollected);
+	_coinLabel->setString(labelCollected->getCString());
 }
 
-void GameHUD::scCollectedChanged(int scCollected)
+void GameHUD::scoreCollectedChanged(int scoreCollected)
 {
 	// This updates the score on the hud
-	String *scoreCollected = new String();
-	scoreCollected->initWithFormat("%d", scCollected);
-	_label2->setString(scoreCollected->getCString());
+	String *_scoreCollected = new String();
+	_scoreCollected->initWithFormat("%d", scoreCollected);
+	_scoreLabel->setString(_scoreCollected->getCString());
 }

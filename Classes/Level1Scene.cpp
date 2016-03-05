@@ -7,6 +7,7 @@
 #include <string>
 #include "SimpleAudioEngine.h"
 
+
 USING_NS_CC;
 
 int totalCreepsLeft = 75;
@@ -321,14 +322,14 @@ void Level1::addTower(Point pos, std::string towerType)
 	Tower *target = NULL;
 	Point towerLoc = this->tileCoordForPosition(pos);
 	bool buildable = canBuildOnTilePosition(pos);
-	if ((buildable && _numCollected >= 5))  {
+	if ((buildable && _numCollected >= 5)) {
 		// Point towerLoc = this->tileCoordForPosition(pos);
 		towerType = towerType.substr(0, 2);
 		CCLOG("TowerType is: %s", towerType.c_str());
 		if (towerType == "MachineGunTower" || towerType == "Ma") {
 			_numCollected = _numCollected - 5;
-			_hud->numCollectedChanged(_numCollected);
-			_hud->scCollectedChanged(_scCollected);
+			_hud->numCoinsCollectedChanged(_numCollected);
+			_hud->scoreCollectedChanged(_scCollected);
 			target = MachineGunTower::tower();
 			target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
 			this->addChild(target, 1);
@@ -337,8 +338,8 @@ void Level1::addTower(Point pos, std::string towerType)
 		}
 		else if (towerType == "FastMachineGunTower" || towerType == "Fa") {
 			_numCollected = _numCollected - 5;
-			_hud->numCollectedChanged(_numCollected);
-			_hud->scCollectedChanged(_scCollected);
+			_hud->numCoinsCollectedChanged(_numCollected);
+			_hud->scoreCollectedChanged(_scCollected);
 			target = FastMachineGunTower::tower();
 			target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
 			this->addChild(target, 1);
@@ -347,8 +348,8 @@ void Level1::addTower(Point pos, std::string towerType)
 		}
 		else if (towerType == "MissleGunTower" || towerType == "Mi") {
 			_numCollected = _numCollected - 5;
-			_hud->numCollectedChanged(_numCollected);
-			_hud->scCollectedChanged(_scCollected);
+			_hud->numCoinsCollectedChanged(_numCollected);
+			_hud->scoreCollectedChanged(_scCollected);
 			target = MissleGunTower::tower();
 			target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
 			this->addChild(target, 1);
@@ -378,66 +379,52 @@ Point Level1::boundLayerPos(Point newPos)
 }
 
 void Level1::update(float dt) {
-	// MachineGun
-	DataModel *m = DataModel::getModel();
-	Vector<Projectile*> projectilesToDelete;
+	// Vector<MachineGunProjectile*> machineGunProjectilesToDelete;
+	// Vector<FastMachineGunProjectile*> fastMachineGunProjectilesToDelete;
+	// Vector<MissleProjectile*> missleProjectilesToDelete;
 	//Level1 *l = ;
 
 	int c = 0;
 	int s = 0;
 
-	for each(Projectile *projectile in m->projectiles)
-		// for (int i = 0; i < m->projectiles.size(); ++i) // Use these code if your VC doesn’t support C++11.
+	DataModel *m = DataModel::getModel();
+	Vector<Projectile*> projectileToDelete;
+	for (int i = 0; i < m->projectiles.size(); ++i)
 	{
-		// auto projectile = m->projectiles.at(i);
-		// auto projectileSprite = projectile->projectileSprite;
-		// int curAttackDamage = projectile->attackDamage;
-
-		// Projectile* projectile = (Projectile*)(m->projectiles.at(i)); // Use these code if your VC doesn’t support C++11.
-		Rect projectileRect = Rect(projectile->getPositionX() - (projectile->getContentSize().width / 2),
-			projectile->getPositionY() - (projectile->getContentSize().height / 2),
+		auto projectile = m->projectiles.at(i);
+		auto projectileSprite = projectile->projectileSprite;
+		Rect projectileRect = Rect(projectile->getPositionX() - (projectile->getContentSize().width) ,
+			projectile->getPositionY() - (projectile->getContentSize().height),
 			projectile->getContentSize().width,
 			projectile->getContentSize().height);
-
-		Vector<Creep*> targetsToDelete;
-
-		for each(Creep *target in m->targets)
-			// for (int i = 0; i < m->targets.size(); ++i) // Use these code if your VC doesn’t support C++11.
+		Vector<Creep *> targetsToDelete;
+		for each (Creep* target in m->targets)
 		{
-			// Creep* target = (Creep*)(m->targets.at(i)); // Use these code if your VC doesn’t support C++11.
-
-			Rect targetRect = Rect(target->getPositionX() - (target->sprite->getContentSize().width / 2),
-				target->getPositionY() - (target->sprite->getContentSize().height / 2),
-				target->sprite->getContentSize().width,
-				target->sprite->getContentSize().height);
-
+			Rect targetRect = Rect(target->getPositionX() - (target->getContentSize().width),
+				target->getPositionY() - (target->getContentSize().height),
+				target->getContentSize().width,
+				target->getContentSize().height);
 			if (projectileRect.intersectsRect(targetRect))
 			{
-				projectilesToDelete.pushBack(projectile);
-
+				// CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(("sound/" + target->hurtSound).c_str());
+				// projectile->runHitAnimation(target);
+				projectileToDelete.pushBack(projectile);
 				Creep *creep = target;
-				// **NB Changes needed here to have different projectile damages
-				// float attackDamage = projectile->attackDamage;
-				// CCLOG("Projectile Attack Damage is : %f" , projectile->attackDamage);
-				// float curAttackDamage = projectile->attackDamage;
 
-
-				// creep->curHp -= projectile->attackDamage;
-				creep->curHp -= 1;
-
+				// Take projectile damage from the creeps health
+				CCLOG("Creeps current health is: %f", creep->curHp);
+				creep->curHp -= projectile->projectileDamage;
+				CCLOG("Creeps health after projectile damage of %f is: %f", projectile->projectileDamage, creep->curHp);
+				
 				if (creep->curHp <= 0)
 				{
+					
 					targetsToDelete.pushBack(creep);
-					//GameHUD* score = (GameHUD*)(c);
-
-					//m->_score=score;
 				}
 				break;
 			}
 		}
-
-		//for(auto target : targetsToDelete)
-
+		// for (auto target : targetsToDelete)
 		for (int i = 0; i < targetsToDelete.size(); ++i)
 		{
 			Creep* target = (Creep*)(targetsToDelete.at(i));
@@ -446,11 +433,12 @@ void Level1::update(float dt) {
 
 			m->targets.eraseObject(target);
 			this->removeChild(target, true);
+
 			//count++;
-			_scCollected++;
-			_hud->scCollectedChanged(_scCollected);
+			_scCollected += 10;
+			_hud->scoreCollectedChanged(_scCollected);
 			_numCollected++;
-			_hud->numCollectedChanged(_numCollected);
+			_hud->numCoinsCollectedChanged(_numCollected);
 
 			// If you've killed all the creeps, change scene
 			if (totalCreepsLeft == 0)
@@ -470,21 +458,26 @@ void Level1::update(float dt) {
 
 			//CCLOG("COIN = %i", count);
 		}
+
 	}
-
-	for (auto *projectile : projectilesToDelete)
-		// for (int i =0; i < projectilesToDelete.size(); i++) // Use these code if your VC doesn’t support C++11.
+	for (auto projectile : projectileToDelete)
 	{
-		// Projectile* projectile = (Projectile*)(projectilesToDelete.at(i)); // Use these code if your VC doesn’t support C++11.
-
 		m->projectiles.eraseObject(projectile);
 		this->removeChild(projectile, true);
+
 	}
+	
+
+
+}
+
+void delayProjectileDelete(float dt)
+{
+
 }
 
 /*void Level1::onEnter()
 {
-
 }
 void Level1::onExit()
 {

@@ -1,7 +1,10 @@
 #include "ui/CocosGUI.h"
 #include <iostream>
+#include "StartMenuScene.h"
 #include "Level1Scene.h"
 #include "HistoryScene.h"
+#include "HistorySecond.h"
+#include "HistoryThird.h"
 #include "SimpleAudioEngine.h"
 #include "DataModel.h"
 
@@ -66,50 +69,48 @@ bool HistoryScene::init()
 	float scale = MIN(visibleSize.width / sprite->getContentSize().width, visibleSize.height / sprite->getContentSize().height);
 	sprite->setScale(scale);
 
-    // add the sprite as a child to this layer
-//    this->addChild(sprite, 1);
-    
+	// add the sprite as a child to this layer
+	//    this->addChild(sprite, 1);
+
 
 	// add the sprite as a child to this layer
 	//this->addChild(sprite, 0);
 
 	// Add a button to start
-	ui::Button* startBtn = ui::Button::create("Normal-Button.png");
-	startBtn->setPosition(Vec2(visibleSize.width / 1.80 + origin.x, visibleSize.height*0.57 + origin.y));
-	startBtn->setScale(0.6f);
+	ui::Button* startBtn = ui::Button::create("Next.png");
+	startBtn->setPosition(Vec2(visibleSize.width / 1.37 + origin.x, visibleSize.height*0.325 + origin.y));
+	startBtn->setScale(0.3f);
 	startBtn->setTitleText(" ");
 	startBtn->setTitleFontSize(80);
 	startBtn->setColor(Color3B(159, 168, 176));
-	startBtn->addTouchEventListener(CC_CALLBACK_0(HistoryScene::startButtonPressed, this));
-	this->addChild(startBtn,1);
+	startBtn->addTouchEventListener(CC_CALLBACK_0(HistoryScene::NextButtonPressed, this));
+	this->addChild(startBtn, 1);
 
 	//Add a Rankings Button
-	ui::Button* rankBtn = ui::Button::create("Ranking-Button.png");
-	rankBtn->setPosition(Vec2(visibleSize.width / 1.80 + origin.x, visibleSize.height*0.50 + origin.y));
-	rankBtn->setScale(0.6f);
+	ui::Button* rankBtn = ui::Button::create("Back.png");
+	rankBtn->setPosition(Vec2(visibleSize.width / 1.37 + origin.x, visibleSize.height*0.265 + origin.y));
+	rankBtn->setScale(0.3f);
 	rankBtn->setTitleText(" ");
 	rankBtn->setTitleFontSize(80);
 	rankBtn->setColor(Color3B(159, 168, 176));
-	rankBtn->addTouchEventListener(CC_CALLBACK_0(HistoryScene::startButtonPressed, this));
-	this->addChild(rankBtn,1);
+	rankBtn->addTouchEventListener(CC_CALLBACK_0(HistoryScene::BackButtonPressed, this));
+	this->addChild(rankBtn, 1);
 
 	//Add a Settings Button
-	ui::Button* settingsBtn = ui::Button::create("Setting-Button.png");
-	settingsBtn->setPosition(Vec2(visibleSize.width / 1.80 + origin.x, visibleSize.height*0.435 + origin.y));
-	settingsBtn->setScale(0.6f);
+	ui::Button* settingsBtn = ui::Button::create("MainMenu.png");
+	settingsBtn->setPosition(Vec2(visibleSize.width / 1.37 + origin.x, visibleSize.height*0.195 + origin.y));
+	settingsBtn->setScale(0.3f);
 	settingsBtn->setTitleText(" ");
 	settingsBtn->setTitleFontSize(80);
 	settingsBtn->setColor(Color3B(159, 168, 176));
-	settingsBtn->addTouchEventListener(CC_CALLBACK_0(HistoryScene::settingsButtonPressed, this));
-	this->addChild(settingsBtn,1);
-
+	settingsBtn->addTouchEventListener(CC_CALLBACK_0(HistoryScene::startButtonPressed, this));
+	this->addChild(settingsBtn, 1);
 	// add the sprite as a child to this layer
 	this->addChild(sprite, -2);
 
 	return true;
 
 	DataModel *m = DataModel::getModel();
-
 
 }
 void HistoryScene::onEnter() {
@@ -123,17 +124,23 @@ void HistoryScene::finishSplash(float dt) {
 	auto HistoryScene = HistoryScene::createScene();
 	Director::getInstance()->replaceScene(TransitionFade::create(2, HistoryScene));
 }
-void HistoryScene::startButtonPressed()
+void HistoryScene::NextButtonPressed()
 {
 	// get startMenu scene and run it
-	auto loadLevel1 = Level1::createScene();
-	Director::getInstance()->replaceScene(TransitionFade::create(2, loadLevel1));
+	auto loadHistorySecond = HistorySecond::createScene();
+	Director::getInstance()->replaceScene(TransitionFade::create(2, loadHistorySecond));
 }
-void HistoryScene::settingsButtonPressed()
+void HistoryScene::BackButtonPressed()
 {
 	// get startMenu scene and run it
 	auto loadHistoryScene = HistoryScene::createScene();
 	Director::getInstance()->replaceScene(TransitionFade::create(2, loadHistoryScene));
+}
+void HistoryScene::startButtonPressed()
+{
+	// get startMenu scene and run it
+	auto loadStartMenu = StartMenu::createScene();
+	Director::getInstance()->replaceScene(TransitionFade::create(2, loadStartMenu));
 }
 void HistoryScene::menuCloseCallback(Ref* pSender)
 {

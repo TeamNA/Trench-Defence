@@ -96,7 +96,7 @@ Creep* StrongGreenCreep::creep()
 	creep->runAction(RepeatForever::create(animate));
 
 	//rotate
-	auto rotateTo = RotateTo::create(3.0f, 80.0f);
+	auto rotateTo = RotateTo::create(6.0f, 80.0f);
 	creep->runAction(rotateTo);
 	// Rotates a Node clockwise by 40 degree over 2 seconds
 	auto rotateBy = RotateBy::create(2.0f, 40.0f);
@@ -116,7 +116,7 @@ Creep* StrongGreenCreep::creep()
 	creep->setScale(0.3);
 	creep->addChild(creep->sprite, 0);
 	creep->curHp = 30;
-	creep->moveDuration = 3;
+	creep->moveDuration = 8;
 	// The curWaypoint may need to be changed depending on the tmx points
 	creep->curWaypoint = 0;
 	return creep;

@@ -6,13 +6,14 @@ Tower* MachineGunTower::tower()
 {
 	// Create a Machinegun tower with its image
 	Tower* tower = Tower::create();
-	tower->sprite = Sprite::create("MachineGun.png");
+	tower->sprite = Sprite::create("MachineGunTurret.png");
 	tower->setScale(0.5);
 	tower->addChild(tower->sprite, 0);
 	// The range the tower can attack within
 	tower->range = 100;
-	// tower->attackDamage = 1;
-	tower->schedule(schedule_selector(towerLogic), 0.1);
+	tower->attackDamage = 2;
+	// tower->projectile = MachineGunTower::projectile;
+	tower->schedule(schedule_selector(towerLogic), 0.3);
 	return tower;
 }
 
@@ -39,20 +40,21 @@ void MachineGunTower::towerLogic(float dt) {
 		float rotateDuration = fabs(shootAngle * rotateSpeed);
 
 		this->runAction(Sequence::create(RotateTo::create(rotateDuration, cocosAngle),
-			CallFunc::create(this, callfunc_selector(MachineGunTower::finishFiring)), NULL));
-		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("Explosion.wav");
+		CallFunc::create(this, callfunc_selector(MachineGunTower::finishFiring)), NULL)); 
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
+			"Explosion.wav");
 	}
 }
 
 /*void MachineGunTower::getAttackDamage()
 {
-return attackDamage;
+	return attackDamage;
 }*/
 
 Creep* Tower::getClosestTarget()
 {
 	Creep *closestCreep = NULL;
-	double maxDistant = 100; // It should be bigger than the range.
+	double maxDistant = 9999; // It should be bigger than the range.
 	DataModel *m = DataModel::getModel();
 
 	for each(Sprite *target in m->targets)
@@ -78,7 +80,7 @@ void MachineGunTower::finishFiring()
 	DataModel *m = DataModel::getModel();
 	if (this->target != NULL && this->target->curHp > 0 && this->target->curHp < 100)
 	{
-		this->nextProjectile = Projectile::projectile();
+		this->nextProjectile = MachineGunProjectile::projectile();
 		this->nextProjectile->setPosition(this->getPosition());
 
 		this->getParent()->addChild(this->nextProjectile, 1);
@@ -90,10 +92,11 @@ void MachineGunTower::finishFiring()
 		Point overshotVector = normalizedShootVector * 320;
 		Point offscreenPoint = (this->getPosition() - overshotVector);
 
-		this->nextProjectile->runAction(Sequence::create(MoveTo::create(delta, offscreenPoint),
-			CallFuncN::create(this, callfuncN_selector(MachineGunTower::creepMoveFinished)), NULL));
+		this->nextProjectile->runAction(Sequence::create(MoveTo::create(delta, offscreenPoint), 
+		CallFuncN::create(this, callfuncN_selector(MachineGunTower::creepMoveFinished)), NULL));
 		this->nextProjectile->setTag(2);
 		this->nextProjectile = NULL;
+
 	}
 }
 
@@ -110,16 +113,16 @@ void MachineGunTower::creepMoveFinished(Node* sender)
 // Fast Machinegun Tower
 Tower* FastMachineGunTower::tower()
 {
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("Explosion.wav");
 	Tower* tower = Tower::create();
 	tower->sprite = Sprite::create("FastMachineGunTurret.png");
 	tower->setScale(0.5);
 	tower->addChild(tower->sprite, 0);
 	// The range within the tower can attack
 	tower->range = 80;
+	tower->attackDamage = 1;
 	// tower->attackDamage = 0.4;
 	// 0.05 is the speed at which the tower attacks
-	tower->schedule(schedule_selector(towerLogic), 0.05);
+	tower->schedule(schedule_selector(towerLogic), 0.15);
 	return tower;
 }
 
@@ -158,7 +161,7 @@ void FastMachineGunTower::finishFiring()
 	DataModel *m = DataModel::getModel();
 	if (this->target != NULL && this->target->curHp > 0 && this->target->curHp < 100)
 	{
-		this->nextProjectile = Projectile::projectile();
+		this->nextProjectile = FastMachineGunProjectile::projectile();
 		this->nextProjectile->setPosition(this->getPosition());
 
 		this->getParent()->addChild(this->nextProjectile, 1);
@@ -196,8 +199,8 @@ Tower* MissleGunTower::tower()
 	tower->addChild(tower->sprite, 0);
 	// The range within which the tower can attack
 	tower->range = 140;
-	// tower->attackDamage = 3.5;
-	tower->schedule(schedule_selector(towerLogic), 0.3);
+	tower->attackDamage = 7;
+	tower->schedule(schedule_selector(towerLogic), 0.5);
 	return tower;
 }
 
@@ -226,7 +229,8 @@ void MissleGunTower::towerLogic(float dt) {
 
 		this->runAction(Sequence::create(RotateTo::create(rotateDuration, cocosAngle),
 			CallFunc::create(this, callfunc_selector(MissleGunTower::finishFiring)), NULL));
-		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("Explosion.wav");
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
+			"MissleExplosion.wav");
 	}
 }
 
@@ -235,7 +239,7 @@ void MissleGunTower::finishFiring()
 	DataModel *m = DataModel::getModel();
 	if (this->target != NULL && this->target->curHp > 0 && this->target->curHp < 100)
 	{
-		this->nextProjectile = Projectile::projectile();
+		this->nextProjectile = MissleProjectile::projectile();
 		this->nextProjectile->setPosition(this->getPosition());
 
 		this->getParent()->addChild(this->nextProjectile, 1);

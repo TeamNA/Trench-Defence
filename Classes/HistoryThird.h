@@ -1,5 +1,5 @@
-#ifndef __HISTROY_THIRD_H__
-#define __HISTROY_THIRD_H__
+#ifndef __HISTORY_THIRD_H__
+#define __HISTORY_THIRD_H__
 
 #include "cocos2d.h"
 
@@ -25,4 +25,4 @@ public:
 	CREATE_FUNC(HistoryThird);
 };
 
-#endif // __HISTROY_SCENE_
+#endif // __HISTORY_SCENE_

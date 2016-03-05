@@ -11,13 +11,15 @@
 #include "GameHUD.h"
 #include "Projectile.h"
 #include "HistoryScene.h"
+#include "HistorySecond.h"
+#include "HistoryThird.h"
 
 USING_NS_CC;
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 //static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
-static cocos2d::Size mediumResolutionSize = cocos2d::Size(720, 480);
+ static cocos2d::Size mediumResolutionSize = cocos2d::Size(720, 480);
 // static cocos2d::Size largeResolutionSize = cocos2d::Size(720, 480);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(720, 480);
 // static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
@@ -122,3 +124,4 @@ void AppDelegate::applicationWillEnterForeground() {
 	// if you use SimpleAudioEngine, it must resume here
 	// SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 }
+
