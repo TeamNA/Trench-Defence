@@ -2,15 +2,12 @@
 #define  _DATAMODEL_H_
 
 #include "cocos2d.h"
-// #include <Vector>
 #include "base/CCVector.h"
 #include "WayPoint.h"
 #include "Creep.h"
 #include "Level1Scene.h"
-// #include "GameHUD.h" // Maybe comment out?
 #include "Tower.h" 
 #include "Projectile.h"
-// #include "Wave.h"
 
 USING_NS_CC;
 

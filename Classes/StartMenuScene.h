@@ -17,6 +17,7 @@ public:
 
 	void startButtonPressed();
 	void rankButtonPressed();
+	void BackButtonPressed();
 	void settingsButtonPressed();
 	void update(float dt);
 	void updateFactTimer(float dt);

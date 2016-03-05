@@ -1,9 +1,9 @@
-#ifndef __HISTROY_SCENE_H__
-#define __HISTROY_SCENE_H__
+#ifndef __HISTROY_SECOND_H__
+#define __HISTROY_SECOND_H__
 
 #include "cocos2d.h"
 
-class HistoryScene : public cocos2d::Layer
+class HistorySecond : public cocos2d::Layer
 {
 public:
 	static cocos2d::Scene* createScene();
@@ -12,16 +12,17 @@ public:
 
 	void onEnter();
 	void finishSplash(float dt);
+	void settingsButtonPressed();
+	void startButtonPressed();
+	void rankButtonPressed();
 	void NextButtonPressed();
 	void BackButtonPressed();
-	void MenuButtonPressed();
-	void startButtonPressed();
 
 	// a selector callback
 	void menuCloseCallback(cocos2d::Ref* pSender);
 
 	// implement the "static create()" method manually
-	CREATE_FUNC(HistoryScene);
+	CREATE_FUNC(HistorySecond);
 };
 
-#endif // __HISTROY_SCENE_H__
+#endif // __HISTROY_SCENE_

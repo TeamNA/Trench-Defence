@@ -6,7 +6,7 @@ Tower* MachineGunTower::tower()
 {
 	// Create a Machinegun tower with its image
 	Tower* tower = Tower::create();
-	tower->sprite = Sprite::create("MachineGunTurret.png");
+	tower->sprite = Sprite::create("MachineGun.png");
 	tower->setScale(0.5);
 	tower->addChild(tower->sprite, 0);
 	// The range the tower can attack within
@@ -39,21 +39,20 @@ void MachineGunTower::towerLogic(float dt) {
 		float rotateDuration = fabs(shootAngle * rotateSpeed);
 
 		this->runAction(Sequence::create(RotateTo::create(rotateDuration, cocosAngle),
-		CallFunc::create(this, callfunc_selector(MachineGunTower::finishFiring)), NULL)); 
-		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
-			"Explosion.wav");
+			CallFunc::create(this, callfunc_selector(MachineGunTower::finishFiring)), NULL));
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("Explosion.wav");
 	}
 }
 
 /*void MachineGunTower::getAttackDamage()
 {
-	return attackDamage;
+return attackDamage;
 }*/
 
 Creep* Tower::getClosestTarget()
 {
 	Creep *closestCreep = NULL;
-	double maxDistant = 9999; // It should be bigger than the range.
+	double maxDistant = 100; // It should be bigger than the range.
 	DataModel *m = DataModel::getModel();
 
 	for each(Sprite *target in m->targets)
@@ -91,11 +90,10 @@ void MachineGunTower::finishFiring()
 		Point overshotVector = normalizedShootVector * 320;
 		Point offscreenPoint = (this->getPosition() - overshotVector);
 
-		this->nextProjectile->runAction(Sequence::create(MoveTo::create(delta, offscreenPoint), 
-		CallFuncN::create(this, callfuncN_selector(MachineGunTower::creepMoveFinished)), NULL));
+		this->nextProjectile->runAction(Sequence::create(MoveTo::create(delta, offscreenPoint),
+			CallFuncN::create(this, callfuncN_selector(MachineGunTower::creepMoveFinished)), NULL));
 		this->nextProjectile->setTag(2);
 		this->nextProjectile = NULL;
-
 	}
 }
 
@@ -112,6 +110,7 @@ void MachineGunTower::creepMoveFinished(Node* sender)
 // Fast Machinegun Tower
 Tower* FastMachineGunTower::tower()
 {
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("Explosion.wav");
 	Tower* tower = Tower::create();
 	tower->sprite = Sprite::create("FastMachineGunTurret.png");
 	tower->setScale(0.5);
@@ -227,8 +226,7 @@ void MissleGunTower::towerLogic(float dt) {
 
 		this->runAction(Sequence::create(RotateTo::create(rotateDuration, cocosAngle),
 			CallFunc::create(this, callfunc_selector(MissleGunTower::finishFiring)), NULL));
-		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
-			"MissleExplosion.wav");
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("Explosion.wav");
 	}
 }
 

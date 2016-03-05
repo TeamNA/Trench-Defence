@@ -38,12 +38,30 @@ bool GameHUD::init()
 	background->setScaleX(2.3);
 	background->setScaleY(1.95);
 
+	auto mySprite = Sprite::create("invisible2.png");
+	mySprite->setPosition(Vec2(visibleSize.width / 11.0 + origin.x, visibleSize.height*0.02 + origin.y));
+	// now lets animate the sprite we moved
+
+	Vector<SpriteFrame*> animFrames;
+	animFrames.reserve(12);
+	animFrames.pushBack(SpriteFrame::create("Flag2.png", Rect(0, 0, 65, 81)));
+	animFrames.pushBack(SpriteFrame::create("Flag1.png", Rect(0, 0, 65, 81)));
+	animFrames.pushBack(SpriteFrame::create("Flag3.png", Rect(0, 0, 65, 81)));
+
+	// create the animation out of the frames
+	Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+	Animate* animate = Animate::create(animation);
+
+	// run it and repeat it forever
+	mySprite->runAction(RepeatForever::create(animate));
+
 	// Create an anchor point at the bottom of the screen to put the hud box
 	// ignoreAnchorPointForPosition(false);
 	// background->setAnchorPoint(Vec2(0.5, 0.5));
 	// background->setPosition(Vec2(0.5, 1));
 	background->setPosition(Point(visibleSize.width*(0.28) + origin.x, visibleSize.height*(0.1) + origin.y));
 	this->addChild(background);
+	this->addChild(mySprite);
 	//CCTexture2D::setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_Default);
 
 
@@ -70,9 +88,10 @@ bool GameHUD::init()
 	}
 
 	// Add the coins label to the hud and set its posiion
-	LabelTTF* ttf1 = LabelTTF::create("COINS = ", "ARMYRUST", 18,
+	LabelTTF* ttf1 = LabelTTF::create("COINS = ", "fonts/ARMYRUST.ttf", 18,
 		CCSizeMake(245, 32), kCCTextAlignmentCenter);
-	LabelTTF* ttf2 = LabelTTF::create("SCORE = ", "ARMYRUST", 18,
+	//Add the score label to the hud and set its posiion
+	LabelTTF* ttf2 = LabelTTF::create("SCORE = ", "fonts/ARMYRUST.ttf", 18,
 		CCSizeMake(245, 32), kCCTextAlignmentCenter);
 
 

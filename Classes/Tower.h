@@ -21,7 +21,7 @@ public:
 	Sprite * selSpriteRange;
 	Creep* getClosestTarget();
 	Projectile* nextProjectile;
-	
+
 	CREATE_FUNC(Tower);
 };
 

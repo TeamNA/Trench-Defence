@@ -6,87 +6,87 @@ USING_NS_CC;
 
 Scene* HelloWorld::createScene()
 {
-    // 'scene' is an autorelease object
-    auto scene = Scene::create();
-    
-    // 'layer' is an autorelease object
-    auto layer = HelloWorld::create();
+	// 'scene' is an autorelease object
+	auto scene = Scene::create();
 
-    // add layer as a child to scene
-    scene->addChild(layer);
+	// 'layer' is an autorelease object
+	auto layer = HelloWorld::create();
 
-    // return the scene
-    return scene;
+	// add layer as a child to scene
+	scene->addChild(layer);
+
+	// return the scene
+	return scene;
 }
 
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
-    //////////////////////////////
-    // 1. super init first
-    if ( !Layer::init() )
-    {
-        return false;
-    }
-    
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	//////////////////////////////
+	// 1. super init first
+	if (!Layer::init())
+	{
+		return false;
+	}
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-    
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
+	/////////////////////////////
+	// 2. add a menu item with "X" image, which is clicked to quit the program
+	//    you may modify it.
 
-    // create menu, it's an autorelease object
+	// add a "close" icon to exit the progress. it's an autorelease object
+	auto closeItem = MenuItemImage::create(
+		"CloseNormal.png",
+		"CloseSelected.png",
+		CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+
+	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
+		origin.y + closeItem->getContentSize().height / 2));
+
+	// create menu, it's an autorelease object
 	/*
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+	auto menu = Menu::create(closeItem, NULL);
+	menu->setPosition(Vec2::ZERO);
+	this->addChild(menu, 1);
 	*/
 
-    /////////////////////////////
-    // 3. add your codes below...
+	/////////////////////////////
+	// 3. add your codes below...
 
-    // add a label shows "Hello World"
-    // create and initialize a label
+	// add a label shows "Hello World"
+	// create and initialize a label
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("Accept.mp3");
 	auto label = Label::createWithTTF("Presents", "fonts/ARMYRUST.ttf", 34);
 
-    // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width*0.8,
-                            origin.y + visibleSize.height*0.05));
+	// position the label on the center of the screen
+	label->setPosition(Vec2(origin.x + visibleSize.width*0.8,
+		origin.y + visibleSize.height*0.05));
 
 	// change the colour of the label to grey
-	label->setColor(ccc3(84,84,84));
+	label->setColor(ccc3(84, 84, 84));
 
-    // add the label as a child to this layer
-    this->addChild(label, 1);
+	// add the label as a child to this layer
+	this->addChild(label, 1);
 
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("TeamNA_logo.png");
+	// add "HelloWorld" splash screen"
+	auto sprite = Sprite::create("TeamNA_logo.png");
 
 	// set the anchor point to the middle
 	sprite->setAnchorPoint(Vec2(0.5, 0.5));
 
-    // position the sprite on the center of the screen
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+	// position the sprite on the center of the screen
+	sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
 	// scale the image to fill the screen
 	float scale = MIN(visibleSize.width / sprite->getContentSize().width, visibleSize.height / sprite->getContentSize().height);
 	sprite->setScale(scale);
 
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
-    
-    return true;
+	// add the sprite as a child to this layer
+	this->addChild(sprite, 0);
+
+	return true;
 }
 
 void HelloWorld::onEnter() {
@@ -104,9 +104,9 @@ void HelloWorld::finishSplash(float dt) {
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
-    Director::getInstance()->end();
+	Director::getInstance()->end();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
+	exit(0);
 #endif
 }
