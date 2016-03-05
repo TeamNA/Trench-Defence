@@ -11,6 +11,12 @@
 USING_NS_CC;
 
 int totalCreepsLeft = 75;
+int totalMachineGunTowersAvailable = 5;
+int totalFastMachineGunTowersAvailable = 3;
+int totalMissleTowersAvailable = 2;
+int machineGunTowerCost = 5;
+int fastMachineGunTowerCost = 8;
+int missleTowerCost = 10;
 
 Scene* Level1::createScene()
 {
@@ -322,40 +328,51 @@ void Level1::addTower(Point pos, std::string towerType)
 	Tower *target = NULL;
 	Point towerLoc = this->tileCoordForPosition(pos);
 	bool buildable = canBuildOnTilePosition(pos);
-	if ((buildable && _numCollected >= 5)) {
+	if ((buildable && _numCollected >= machineGunTowerCost)) {
 		// Point towerLoc = this->tileCoordForPosition(pos);
 		towerType = towerType.substr(0, 2);
 		CCLOG("TowerType is: %s", towerType.c_str());
 		if (towerType == "MachineGunTower" || towerType == "Ma") {
-			_numCollected = _numCollected - 5;
-			_hud->numCoinsCollectedChanged(_numCollected);
-			_hud->scoreCollectedChanged(_scCollected);
-			target = MachineGunTower::tower();
-			target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
-			this->addChild(target, 1);
-			target->setTag(1);
-			m->towers.pushBack(target);
+			if (totalMachineGunTowersAvailable > 0) {
+				_numCollected = _numCollected - machineGunTowerCost;
+				_hud->numCoinsCollectedChanged(_numCollected);
+				_hud->scoreCollectedChanged(_scCollected);
+				target = MachineGunTower::tower();
+				target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
+				this->addChild(target, 1);
+				target->setTag(1);
+				m->towers.pushBack(target);
+			}
 		}
-		else if (towerType == "FastMachineGunTower" || towerType == "Fa") {
-			_numCollected = _numCollected - 5;
-			_hud->numCoinsCollectedChanged(_numCollected);
-			_hud->scoreCollectedChanged(_scCollected);
-			target = FastMachineGunTower::tower();
-			target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
-			this->addChild(target, 1);
-			target->setTag(1);
-			m->towers.pushBack(target);
+		if ((buildable && _numCollected >= fastMachineGunTowerCost)) {
+			if (towerType == "FastMachineGunTower" || towerType == "Fa") {
+				if (totalFastMachineGunTowersAvailable > 0) {
+					_numCollected = _numCollected - fastMachineGunTowerCost;
+					_hud->numCoinsCollectedChanged(_numCollected);
+					_hud->scoreCollectedChanged(_scCollected);
+					target = FastMachineGunTower::tower();
+					target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
+					this->addChild(target, 1);
+					target->setTag(1);
+					m->towers.pushBack(target);
+				}
+			}
 		}
-		else if (towerType == "MissleGunTower" || towerType == "Mi") {
-			_numCollected = _numCollected - 5;
-			_hud->numCoinsCollectedChanged(_numCollected);
-			_hud->scoreCollectedChanged(_scCollected);
-			target = MissleGunTower::tower();
-			target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
-			this->addChild(target, 1);
-			target->setTag(1);
-			m->towers.pushBack(target);
+		if ((buildable && _numCollected >= missleTowerCost)) {
+			if (towerType == "MissleGunTower" || towerType == "Mi") {
+				if (totalMissleTowersAvailable > 0) {
+					_numCollected = _numCollected - missleTowerCost;
+					_hud->numCoinsCollectedChanged(_numCollected);
+					_hud->scoreCollectedChanged(_scCollected);
+					target = MissleGunTower::tower();
+					target->setPosition(Vec2((towerLoc.x * 20) + 10, this->_tileMap->getContentSize().height - (towerLoc.y * 20) + 150));
+					this->addChild(target, 1);
+					target->setTag(1);
+					m->towers.pushBack(target);
+				}
+			}
 		}
+		
 		else {
 			return;
 		}
