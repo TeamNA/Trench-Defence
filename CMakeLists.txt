@@ -125,13 +125,13 @@ endif( WIN32 )
 set(GAME_SRC
   Classes/AppDelegate.cpp
   Classes/HelloWorldScene.cpp
-  Classes/StartMenuScene.cpp  Classes/Level1Scene.cpp  Classes/Creep.cpp  Classes/WayPoint.cpp  Classes/Wave.cpp  Classes/DataModel.cpp  Classes/Tower.cpp  Classes/GameHUD.cpp  Classes/Projectile.cpp${PLATFORM_SPECIFIC_SRC}
+  Classes/Creep.cpp  Classes/DataModel.cpp  Classes/Level1Scene.cpp  Classes/StartMenuScreen.cpp Classes/Wave.cpp  Classes/Tower.cpp  Classes/Projectile.cpp  Classes/Waypoint.cpp  Classes/GameHUD.cpp Classes/HistoyScene.cpp Classes/HistoySecond.cpp Classes/HistoyThird.cpp Classes/Level2Scene.cpp ${PLATFORM_SPECIFIC_SRC}
 )
 
 set(GAME_HEADERS
   Classes/AppDelegate.h
   Classes/HelloWorldScene.h
-  Classes/StartMenuScene.h  Classes/Level1Scene.h  Classes/Creep.h  Classes/WayPoint.h  Classes/Wave.h  Classes/DataModel.h  Classes/Tower.h  Classes/GameHUD.h  Classes/Projectile.h${PLATFORM_SPECIFIC_HEADERS}
+  Classes/DataModel  Classes/Creep.h  Classes/Level1Scene.h  Classes/StartMenuScene.h  Classes/Wave.h  Classes/Waypoint.h  Classes/Tower.h  Classes/Projectile.h  Classes/GameHUD.h Classes/HistoryScene.h Classes/HistorySecond.h Classes/HistoryThird.h Classes/Level2Scene.h${PLATFORM_SPECIFIC_HEADERS}
 )
 
 if(GAME_HEADERS)
