@@ -23,6 +23,7 @@ public:
 	void FollowPath(Node *sender);
 	void gameLogic(float dt);
 	void addTarget();
+	// void updateAvailableTowers(int totalMachineGunTowers, int totalFastMachineGunTowers, int totalMissleTowers);
 	virtual void update(float dt);
 	Wave* getCurrentWave();
 	Wave* getNextWave();
@@ -42,6 +43,8 @@ public:
 	void setCount(int c) { count = c; };
 	int getSCount() { return count; };
 	void setSCount(int s) { count = s; };
+
+	void youWon();
 
 	Point position;
 	GameHUD *gameHUD;

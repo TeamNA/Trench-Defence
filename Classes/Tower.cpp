@@ -11,7 +11,9 @@ Tower* MachineGunTower::tower()
 	tower->addChild(tower->sprite, 0);
 	// The range the tower can attack within
 	tower->range = 100;
-	tower->attackDamage = 2;
+	tower->towerCost = 5;
+	tower->towersAvailable = 5;
+	// tower->attackDamage = 2;
 	// tower->projectile = MachineGunTower::projectile;
 	tower->schedule(schedule_selector(towerLogic), 0.3);
 	return tower;
@@ -119,7 +121,9 @@ Tower* FastMachineGunTower::tower()
 	tower->addChild(tower->sprite, 0);
 	// The range within the tower can attack
 	tower->range = 80;
-	tower->attackDamage = 1;
+	tower->towerCost = 8;
+	tower->towersAvailable = 3;
+	// tower->attackDamage = 1;
 	// tower->attackDamage = 0.4;
 	// 0.05 is the speed at which the tower attacks
 	tower->schedule(schedule_selector(towerLogic), 0.15);
@@ -199,7 +203,9 @@ Tower* MissleGunTower::tower()
 	tower->addChild(tower->sprite, 0);
 	// The range within which the tower can attack
 	tower->range = 140;
-	tower->attackDamage = 7;
+	tower->towerCost = 10;
+	tower->towersAvailable = 2;
+	// tower->attackDamage = 7;
 	tower->schedule(schedule_selector(towerLogic), 0.5);
 	return tower;
 }

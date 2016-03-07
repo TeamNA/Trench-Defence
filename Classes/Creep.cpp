@@ -3,6 +3,7 @@
 #include "DataModel.h"
 #include "StartMenuScene.h"
 
+
 USING_NS_CC;
 
 bool Creep::init()
@@ -132,6 +133,10 @@ WayPoint* Creep::getCurrentWaypoint()
 
 WayPoint* Creep::getNextWaypoint()
 {
+
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
 	DataModel* m = DataModel::getModel();
 
 	// Increment the waypoint by 1 if it hasn't reached the last checkpoint
@@ -153,8 +158,11 @@ WayPoint* Creep::getNextWaypoint()
 		/*auto loseLabel = Label::createWithTTF("label test", "fonts/Marker Felt.ttf", 32);
 		loseLabel->setPosition(Point(size.width / 2, size.height*0.6));
 		this->addChild(loseLabel);*/
+
+		youLost();
+
 		auto loadMenu = StartMenu::createScene();
-		Director::getInstance()->replaceScene(TransitionFade::create(2, loadMenu));
+		Director::getInstance()->replaceScene(TransitionFade::create(3, loadMenu));
 	}
 
 
@@ -162,4 +170,19 @@ WayPoint* Creep::getNextWaypoint()
 
 	WayPoint *waypoint = (WayPoint *)m->waypoints.at(curWaypoint);
 	return waypoint;
+}
+
+void Creep::youLost()
+{
+	DataModel *m = DataModel::getModel();
+
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	CCLabelTTF* youLost_ttf1 = CCLabelTTF::create("Level 1 Failed!\n\n\nYOU LOST!!!", "Helvetica", 32,
+		CCSizeMake(245, 32), kCCTextAlignmentCenter);
+	youLost_ttf1->setPosition(Vec2(265, visibleSize.height*(0.6) + origin.y));
+	m->_gameLayer->addChild(youLost_ttf1);
+
+
 }

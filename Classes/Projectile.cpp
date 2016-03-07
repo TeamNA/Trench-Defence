@@ -12,41 +12,6 @@
 	}
 }*/
 
-/*Projectile* MachineGunProjectile::projectile()
-{
-	Projectile* projectile = (Projectile*)Sprite::create("Projectile.png");
-	if (projectile != NULL)
-	{
-		return projectile;
-	}
-	else {
-		return NULL;
-	}
-}
-
-Projectile* FastMachineGunProjectile::projectile()
-{
-	Projectile* projectile = (Projectile*)Sprite::create("Projectile.png");
-	if (projectile != NULL)
-	{
-		return projectile;
-	}
-	else {
-		return NULL;
-	}
-}
-
-Projectile* MissleProjectile::projectile()
-{
-	Projectile* projectile = (Projectile*)Sprite::create("Projectile.png");
-	if (projectile != NULL)
-	{
-		return projectile;
-	}
-	else {
-		return NULL;
-	}
-}*/
 
 Projectile* MachineGunProjectile::projectile()
 {

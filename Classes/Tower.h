@@ -16,14 +16,16 @@ class Tower : public Sprite
 {
 public:
 	int range;
-	int attackDamage;
+	int towerCost;
+	int towersAvailable;
+	// int attackDamage;
 	// Sprite *deck;
 	Sprite* sprite;
 	Creep* target;
 	Sprite * selSpriteRange;
 	Creep* getClosestTarget();
 	Projectile* nextProjectile;
-	Projectile* *projectile();
+	// Projectile* *projectile();
 	
 	CREATE_FUNC(Tower);
 };

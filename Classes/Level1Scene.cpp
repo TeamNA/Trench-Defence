@@ -11,12 +11,20 @@
 USING_NS_CC;
 
 int totalCreepsLeft = 75;
-int totalMachineGunTowersAvailable = 5;
-int totalFastMachineGunTowersAvailable = 3;
-int totalMissleTowersAvailable = 2;
-int machineGunTowerCost = 5;
-int fastMachineGunTowerCost = 8;
-int missleTowerCost = 10;
+
+
+// float machineGunProjectileDamage = MachineGunProjectile::projectile()->projectileDamage;
+/*int machineGunTowerCost = MachineGunTower::tower()->towerCost;
+int fastMachineGunTowerCost = FastMachineGunTower::tower()->towerCost;
+int missleTowerCost = MissleGunTower::tower()->towerCost;*/
+int machineGunTowerCost;
+int fastMachineGunTowerCost;
+int missleTowerCost;
+int totalMachineGunTowersAvailable;
+int totalFastMachineGunTowersAvailable;
+int totalMissleTowersAvailable;
+
+
 
 Scene* Level1::createScene()
 {
@@ -25,6 +33,8 @@ Scene* Level1::createScene()
 
 	CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("War.wav", true);
+
+	CCLOG("Total creeps count = %d", totalCreepsLeft);
 
 	// 'layer' is an autorelease object
 	auto layer = Level1::create();
@@ -36,6 +46,7 @@ Scene* Level1::createScene()
 	// auto myGameHUD = GameHUD::shareHUD();
 	GameHUD *hud = new GameHUD;
 	hud->init();
+	
 	// add gameHUD
 	// Level1Scene->addChild(myGameHUD, 3);
 
@@ -56,7 +67,14 @@ Scene* Level1::createScene()
 
 Level1::~Level1()
 {
+	// DataModel *m = DataModel::getModel();
 	// turretBases->release();
+	/*m->waypoints.clear();
+	m->targets.clear();
+	m->waves.clear();
+	m->towers.clear();    // We will deal with it later.
+	m->projectiles.clear();  // We will deal with it later.
+	*/
 }
 
 // on "init" you need to initialize your instance
@@ -76,6 +94,16 @@ bool Level1::init()
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	machineGunTowerCost = MachineGunTower::tower()->towerCost;
+	fastMachineGunTowerCost = FastMachineGunTower::tower()->towerCost;
+	missleTowerCost = MissleGunTower::tower()->towerCost;
+
+	totalMachineGunTowersAvailable = MachineGunTower::tower()->towersAvailable;
+	totalFastMachineGunTowersAvailable = FastMachineGunTower::tower()->towersAvailable;
+	totalMissleTowersAvailable = MissleGunTower::tower()->towersAvailable;
+
+	// updateAvailableTowers(5, 3, 2);
 
 	// Add the TMX map
 	_tileMap = new CCTMXTiledMap();
@@ -133,6 +161,12 @@ bool Level1::init()
 	return true;
 }
 
+/*void Level1::updateAvailableTowers(int totalMachineGunTowers, int totalFastMachineGunTowers, int totalMissleTowers) {
+	totalMachineGunTowersAvailable = totalMachineGunTowers;
+	totalFastMachineGunTowersAvailable = totalFastMachineGunTowers;
+	totalMissleTowersAvailable = totalMissleTowers;
+}*/
+
 void Level1::menuCloseCallback(Ref* pSender)
 {
 	Director::getInstance()->end();
@@ -181,12 +215,12 @@ void Level1::addWaves()
 	Wave *wave = NULL;
 
 	// Create a wave of 75 Fast red creeps with a spawn rate of 0.7 seconds
-	wave = Wave::create()->initWithCreep(FastRedCreep::creep(), 0.7, 75);
+	wave = Wave::create()->initWithCreep(FastRedCreep::creep(), 0.7, 100);
 	m->waves.pushBack(wave);
 	wave = NULL;
 
 	// Create a wave of 10 Strong GreenCreeps and spawn them every 2 seconds
-	wave = Wave::create()->initWithCreep(StrongGreenCreep::creep(), 2.0, 10);
+	wave = Wave::create()->initWithCreep(StrongGreenCreep::creep(), 2.0, 30);
 	m->waves.pushBack(wave);
 	wave = NULL;
 }
@@ -328,12 +362,20 @@ void Level1::addTower(Point pos, std::string towerType)
 	Tower *target = NULL;
 	Point towerLoc = this->tileCoordForPosition(pos);
 	bool buildable = canBuildOnTilePosition(pos);
+	// If the terrain is buildable, AND you have more coins than the cost of the machine gun(5 coins)...
 	if ((buildable && _numCollected >= machineGunTowerCost)) {
 		// Point towerLoc = this->tileCoordForPosition(pos);
 		towerType = towerType.substr(0, 2);
 		CCLOG("TowerType is: %s", towerType.c_str());
+		// If the tower that's been selected returns the machine gun string...
 		if (towerType == "MachineGunTower" || towerType == "Ma") {
+			// And if the number of available towers isn't 0 then add the tower and decrement the total number
 			if (totalMachineGunTowersAvailable > 0) {
+				// Decrement the total number of missle towers available
+				totalMachineGunTowersAvailable--;
+				// Update the available missle towers on the hud
+				_hud->machineGunsAVAILABLEInit(totalMachineGunTowersAvailable);
+				// Take away the cost from the total coins and update the hud
 				_numCollected = _numCollected - machineGunTowerCost;
 				_hud->numCoinsCollectedChanged(_numCollected);
 				_hud->scoreCollectedChanged(_scCollected);
@@ -344,9 +386,17 @@ void Level1::addTower(Point pos, std::string towerType)
 				m->towers.pushBack(target);
 			}
 		}
+		// If the terrain is buildable, AND you have more coins than the cost of the fast machine gun(8 coins)...
 		if ((buildable && _numCollected >= fastMachineGunTowerCost)) {
+			// If the tower that's been selected returns the fast machine gun string...
 			if (towerType == "FastMachineGunTower" || towerType == "Fa") {
+				// And if the number of available towers isn't 0 then add the tower and decrement the total number
 				if (totalFastMachineGunTowersAvailable > 0) {
+					// Decrement the total number of missle towers available
+					totalFastMachineGunTowersAvailable--;
+					// Update the available missle towers on the hud
+					_hud->fastMachineGunsAVAILABLEInit(totalFastMachineGunTowersAvailable);
+					// Take away the cost from the total coins and update the hud
 					_numCollected = _numCollected - fastMachineGunTowerCost;
 					_hud->numCoinsCollectedChanged(_numCollected);
 					_hud->scoreCollectedChanged(_scCollected);
@@ -358,9 +408,17 @@ void Level1::addTower(Point pos, std::string towerType)
 				}
 			}
 		}
+		// If the terrain is buildable, AND you have more coins than the cost of the missle tower(10 coins)...
 		if ((buildable && _numCollected >= missleTowerCost)) {
+			// If the tower that's been selected returns the missle tower string...
 			if (towerType == "MissleGunTower" || towerType == "Mi") {
+				// And if the number of available towers isn't 0 then add the tower
 				if (totalMissleTowersAvailable > 0) {
+					// Decrement the total number of missle towers available
+					totalMissleTowersAvailable--;
+					// Update the available missle towers on the hud
+					_hud->misslesAVAILABLEInit(totalMissleTowersAvailable);
+					// Take away the cost from the total coins and update the hud
 					_numCollected = _numCollected - missleTowerCost;
 					_hud->numCoinsCollectedChanged(_numCollected);
 					_hud->scoreCollectedChanged(_scCollected);
@@ -396,6 +454,7 @@ Point Level1::boundLayerPos(Point newPos)
 }
 
 void Level1::update(float dt) {
+	
 	// Vector<MachineGunProjectile*> machineGunProjectilesToDelete;
 	// Vector<FastMachineGunProjectile*> fastMachineGunProjectilesToDelete;
 	// Vector<MissleProjectile*> missleProjectilesToDelete;
@@ -405,6 +464,7 @@ void Level1::update(float dt) {
 	int s = 0;
 
 	DataModel *m = DataModel::getModel();
+	// _hud->machineGunATKInit(machineGunProjectileDamage);
 	Vector<Projectile*> projectileToDelete;
 	for (int i = 0; i < m->projectiles.size(); ++i)
 	{
@@ -460,17 +520,15 @@ void Level1::update(float dt) {
 			// If you've killed all the creeps, change scene
 			if (totalCreepsLeft == 0)
 			{
+				youWon();
+
 				auto loadMenu = StartMenu::createScene();
 				//DataModel *m = DataModel::getModel();
 				// Director::getInstance()->popScene();
 				// Director::getInstance()->pushScene((1, loadMenu));
-				Director::getInstance()->replaceScene(TransitionScene::create(2, loadMenu));
-				/*m->waypoints.clear();
-				m->targets.clear();
-				m->waves.clear();
-				m->towers.clear();    // We will deal with it later.
-				m->projectiles.clear();  // We will deal with it later.
-				*/
+
+				Director::getInstance()->replaceScene(TransitionScene::create(5, loadMenu));
+				
 			}
 
 			//CCLOG("COIN = %i", count);
@@ -488,6 +546,20 @@ void Level1::update(float dt) {
 
 }
 
+void Level1::youWon()
+{
+	DataModel *m = DataModel::getModel();
+
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	CCLabelTTF* youWon_ttf1 = CCLabelTTF::create("Level 1 Passed! \n\n\nYOU WIN!!!", "Helvetica", 32,
+		CCSizeMake(245, 32), kCCTextAlignmentCenter);
+	youWon_ttf1->setPosition(Vec2(265, visibleSize.height*(0.6) + origin.y));
+	m->_gameLayer->addChild(youWon_ttf1);
+}
+
+
 void delayProjectileDelete(float dt)
 {
 
@@ -495,18 +567,18 @@ void delayProjectileDelete(float dt)
 
 /*void Level1::onEnter()
 {
-}
-void Level1::onExit()
+}*/
+/*void Level1::onExit()
 {
-DataModel *m = DataModel::getModel();
-m->waypoints.clear();
-m->targets.clear();
-m->waves.clear();
-m->towers.clear();    // We will deal with it later.
-m->projectiles.clear();  // We will deal with it later.
-this->unscheduleAllSelectors();
-this->release();
-// CCTextureCache sharedTextureCache[removeAllTextures];
+	/*DataModel *m = DataModel::getModel();
+	m->waypoints.clear();
+	m->targets.clear();
+	m->waves.clear();
+	m->towers.clear();    // We will deal with it later.
+	m->projectiles.clear();  // We will deal with it later.
+	//this->unscheduleAllSelectors();
+	// this->release();
+	// CCTextureCache sharedTextureCache[removeAllTextures];
 }*/
 
 //  #endif

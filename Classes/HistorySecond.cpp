@@ -83,7 +83,7 @@ bool HistorySecond::init()
 	startBtn->setTitleText(" ");
 	startBtn->setTitleFontSize(80);
 	startBtn->setColor(Color3B(159, 168, 176));
-	startBtn->addTouchEventListener(CC_CALLBACK_0(HistorySecond::startButtonPressed, this));
+	startBtn->addTouchEventListener(CC_CALLBACK_0(HistorySecond::NextButtonPressed, this));
 	this->addChild(startBtn, 1);
 
 	//Add a Rankings Button

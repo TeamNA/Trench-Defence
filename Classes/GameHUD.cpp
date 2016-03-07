@@ -24,10 +24,94 @@ bool GameHUD::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+	float machineGunProjectileDamage = MachineGunProjectile::projectile()->projectileDamage;
+	float fastMachineGunProjectileDamage = FastMachineGunProjectile::projectile()->projectileDamage;
+	float missleProjectileDamage = MissleProjectile::projectile()->projectileDamage;
+
+	float machineGunTowerRange = MachineGunTower::tower()->range;
+	float fastMachineGunTowerRange = FastMachineGunTower::tower()->range;
+	float missleTowerRange = MissleGunTower::tower()->range;
+
+	int machineGunTowerCost = MachineGunTower::tower()->towerCost;
+	int fastMachineGunTowerCost = FastMachineGunTower::tower()->towerCost;
+	int missleTowerCost = MissleGunTower::tower()->towerCost;
+
+	int totalMachineGunTowersAvailable = MachineGunTower::tower()->towersAvailable;
+	int totalFastMachineGunTowersAvailable = FastMachineGunTower::tower()->towersAvailable;
+	int totalMissleTowersAvailable = MissleGunTower::tower()->towersAvailable;
+
+	CCLOG("Machine Gun Cost: %d ", machineGunTowerCost);
+
+	// Tower Attack Labels
+	_machineGunATKLabel = new CCLabelTTF();
+	_machineGunATKLabel->initWithString("2", "Verdana-Bold", 6.0);
+	_machineGunATKLabel->setColor(ccc3(0, 0, 0));
+	machineGunATKInit(machineGunProjectileDamage);
+
+	_fastMachineGunATKLabel = new CCLabelTTF();
+	_fastMachineGunATKLabel->initWithString("5", "Verdana-Bold", 6.0);
+	_fastMachineGunATKLabel->setColor(ccc3(0, 0, 0));
+	fastMachineGunATKInit(fastMachineGunProjectileDamage);
+
+	_missleATKLabel = new CCLabelTTF();
+	_missleATKLabel->initWithString("5", "Verdana-Bold", 6.0);
+	_missleATKLabel->setColor(ccc3(0, 0, 0));
+	missleATKInit(missleProjectileDamage);
+
+	// Tower Range Labels
+	_machineGunRNGLabel = new CCLabelTTF();
+	_machineGunRNGLabel->initWithString("5", "Verdana-Bold", 6.0);
+	_machineGunRNGLabel->setColor(ccc3(0, 0, 0));
+	machineGunRNGInit(machineGunTowerRange);
+
+	_fastMachineGunRNGLabel = new CCLabelTTF();
+	_fastMachineGunRNGLabel->initWithString("5", "Verdana-Bold", 6.0);
+	_fastMachineGunRNGLabel->setColor(ccc3(0, 0, 0));
+	fastMachineGunRNGInit(fastMachineGunTowerRange);
+
+	_missleRNGLabel = new CCLabelTTF();
+	_missleRNGLabel->initWithString("5", "Verdana-Bold", 6.0);
+	_missleRNGLabel->setColor(ccc3(0, 0, 0));
+	missleRNGInit(missleTowerRange);
+
+	// Tower Cost Labels
+	_machineGunCOSTLabel = new CCLabelTTF();
+	_machineGunCOSTLabel->initWithString("5", "Verdana-Bold", 6.0);
+	_machineGunCOSTLabel->setColor(ccc3(0, 0, 0));
+	machineGunCOSTInit(machineGunTowerCost);
+
+	_fastMachineGunCOSTLabel = new CCLabelTTF();
+	_fastMachineGunCOSTLabel->initWithString("5", "Verdana-Bold", 6.0);
+	_fastMachineGunCOSTLabel->setColor(ccc3(0, 0, 0));
+	fastMachineGunCOSTInit(fastMachineGunTowerCost);
+
+	_missleCOSTLabel = new CCLabelTTF();
+	_missleCOSTLabel->initWithString("5", "Verdana-Bold", 6.0);
+	_missleCOSTLabel->setColor(ccc3(0, 0, 0));
+	missleCOSTInit(missleTowerCost);
+
+	// Towers Available labels
+	_machineGunsAVAILABLELabel = new CCLabelTTF();
+	_machineGunsAVAILABLELabel->initWithString("5", "Verdana-Bold", 6.0);
+	_machineGunsAVAILABLELabel->setColor(ccc3(0, 0, 0));
+	machineGunsAVAILABLEInit(totalMachineGunTowersAvailable);
+
+	_fastMachineGunsAVAILABLELabel = new CCLabelTTF();
+	_fastMachineGunsAVAILABLELabel->initWithString("5", "Verdana-Bold", 6.0);
+	_fastMachineGunsAVAILABLELabel->setColor(ccc3(0, 0, 0));
+	fastMachineGunsAVAILABLEInit(totalFastMachineGunTowersAvailable);
+
+	_misslesAVAILABLELabel = new CCLabelTTF();
+	_misslesAVAILABLELabel->initWithString("5", "Verdana-Bold", 6.0);
+	_misslesAVAILABLELabel->setColor(ccc3(0, 0, 0));
+	misslesAVAILABLEInit(totalMissleTowersAvailable);
+
+	// Coin label
 	_coinLabel = new CCLabelTTF();
 	_coinLabel->initWithString("5", "Verdana-Bold", 18.0);
 	_coinLabel->setColor(ccc3(0, 0, 0));
 
+	// Score label
 	_scoreLabel = new CCLabelTTF();
 	_scoreLabel->initWithString("0", "Verdana-Bold", 18.0);
 	_scoreLabel->setColor(ccc3(0, 0, 0));
@@ -62,31 +146,149 @@ bool GameHUD::init()
 
 		float offsetFraction = ((float)(i + 1)) / (images.size() + 1);
 		sprite->setScale(0.6);
-		sprite->setPosition(Vec2(winSize.width*(offsetFraction / 2), visibleSize.height*(0.11) + origin.y));
+		sprite->setPosition(Vec2(winSize.width*(offsetFraction / 1.78), visibleSize.height*(0.105) + origin.y));
 		sprite->setContentSize(Size(50, 50));
 		sprite->setName(image->getCString());
 		this->addChild(sprite);
 		movableSprites.pushBack(sprite);
 	}
 
+	// Labels for the names of the turrets
+	LabelTTF* machineGunLabel_ttf1 = LabelTTF::create("Machine Gun", "ARMYRUST", 6,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	machineGunLabel_ttf1->setPosition(Vec2(130, visibleSize.height*(0.105) + origin.y));
+	machineGunLabel_ttf1->setColor(ccc3(0, 0, 0));
+	LabelTTF* fastMachineGunLabel_ttf1 = LabelTTF::create("Fast Machine Gun", "ARMYRUST", 6,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	fastMachineGunLabel_ttf1->setPosition(Vec2(200, visibleSize.height*(0.105) + origin.y));
+	fastMachineGunLabel_ttf1->setColor(ccc3(0, 0, 0));
+	LabelTTF* missleLabel_ttf1 = LabelTTF::create("Missle Tower", "ARMYRUST", 6,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	missleLabel_ttf1->setPosition(Vec2(265, visibleSize.height*(0.105) + origin.y));
+	missleLabel_ttf1->setColor(ccc3(0, 0, 0));
+
+	// Labels for the attack stats of the turrets
+	LabelTTF* machineGunATKLabel_ttf1 = LabelTTF::create("ATK: ", "ARMYRUST", 5,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	machineGunATKLabel_ttf1->setPosition(Vec2(130, visibleSize.height*(0.080) + origin.y));
+	machineGunATKLabel_ttf1->setColor(ccc3(0, 0, 0));
+	LabelTTF* fastMachineGunATKLabel_ttf1 = LabelTTF::create("ATK: ", "ARMYRUST", 5,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	fastMachineGunATKLabel_ttf1->setPosition(Vec2(200, visibleSize.height*(0.080) + origin.y));
+	fastMachineGunATKLabel_ttf1->setColor(ccc3(0, 0, 0));
+	LabelTTF* missleATKLabel_ttf1 = LabelTTF::create("ATK: ", "ARMYRUST", 5,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	missleATKLabel_ttf1->setPosition(Vec2(265, visibleSize.height*(0.080) + origin.y));
+	missleATKLabel_ttf1->setColor(ccc3(0, 0, 0));
+
+	// These labels contain the actual number of the ATK and change the label to show changes
+	_machineGunATKLabel->setPosition(Vec2(43, visibleSize.height*(0.12) + origin.y));
+	_fastMachineGunATKLabel->setPosition(Vec2(112, visibleSize.height*(0.12) + origin.y));
+	_missleATKLabel->setPosition(Vec2(180, visibleSize.height*(0.12) + origin.y));
+
+	// Labels for the range stats of the turrets
+	LabelTTF* machineGunRNGLabel_ttf1 = LabelTTF::create("RANGE: ", "ARMYRUST", 5,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	machineGunRNGLabel_ttf1->setPosition(Vec2(130, visibleSize.height*(0.060) + origin.y));
+	machineGunRNGLabel_ttf1->setColor(ccc3(0, 0, 0));
+	LabelTTF* fastMachineGunRNGLabel_ttf1 = LabelTTF::create("RANGE: ", "ARMYRUST", 5,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	fastMachineGunRNGLabel_ttf1->setPosition(Vec2(200, visibleSize.height*(0.060) + origin.y));
+	fastMachineGunRNGLabel_ttf1->setColor(ccc3(0, 0, 0));
+	LabelTTF* missleRNGLabel_ttf1 = LabelTTF::create("RANGE: ", "ARMYRUST", 5,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	missleRNGLabel_ttf1->setPosition(Vec2(265, visibleSize.height*(0.060) + origin.y));
+	missleRNGLabel_ttf1->setColor(ccc3(0, 0, 0));
+
+	// These labels contain the actual number of the RNG and change the label to show changes
+	_machineGunRNGLabel->setPosition(Vec2(40, visibleSize.height*(0.10) + origin.y));
+	_fastMachineGunRNGLabel->setPosition(Vec2(110, visibleSize.height*(0.10) + origin.y));
+	_missleRNGLabel->setPosition(Vec2(176, visibleSize.height*(0.10) + origin.y));
+
+	// Labels for the cost stats of the turrets
+	LabelTTF* machineGunCOSTLabel_ttf1 = LabelTTF::create("COST: ", "ARMYRUST", 5,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	machineGunCOSTLabel_ttf1->setPosition(Vec2(130, visibleSize.height*(0.040) + origin.y));
+	machineGunCOSTLabel_ttf1->setColor(ccc3(0, 0, 0));
+	LabelTTF* fastMachineGunCOSTLabel_ttf1 = LabelTTF::create("COST: ", "ARMYRUST", 5,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	fastMachineGunCOSTLabel_ttf1->setPosition(Vec2(200, visibleSize.height*(0.040) + origin.y));
+	fastMachineGunCOSTLabel_ttf1->setColor(ccc3(0, 0, 0));
+	LabelTTF* missleCOSTLabel_ttf1 = LabelTTF::create("COST: ", "ARMYRUST", 5,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	missleCOSTLabel_ttf1->setPosition(Vec2(265, visibleSize.height*(0.040) + origin.y));
+	missleCOSTLabel_ttf1->setColor(ccc3(0, 0, 0));
+
+	// These labels contain the actual number of the COST and change the label to show changes
+	_machineGunCOSTLabel->setPosition(Vec2(45, visibleSize.height*(0.08) + origin.y));
+	_fastMachineGunCOSTLabel->setPosition(Vec2(115, visibleSize.height*(0.08) + origin.y));
+	_missleCOSTLabel->setPosition(Vec2(180, visibleSize.height*(0.08) + origin.y));
+
+	// Labels for the AVAILABLE stats of the turrets
+	LabelTTF* machineGunsAVAILABLELabel_ttf1 = LabelTTF::create("AVAILABLE: ", "ARMYRUST", 5,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	machineGunsAVAILABLELabel_ttf1->setPosition(Vec2(130, visibleSize.height*(0.020) + origin.y));
+	machineGunsAVAILABLELabel_ttf1->setColor(ccc3(0, 0, 0));
+	LabelTTF* fastMachineGunsAVAILABLELabel_ttf1 = LabelTTF::create("AVAILABLE: ", "ARMYRUST", 5,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	fastMachineGunsAVAILABLELabel_ttf1->setPosition(Vec2(200, visibleSize.height*(0.020) + origin.y));
+	fastMachineGunsAVAILABLELabel_ttf1->setColor(ccc3(0, 0, 0));
+	LabelTTF* misslesAVAILABLELabel_ttf1 = LabelTTF::create("AVAILABLE: ", "ARMYRUST", 5,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	misslesAVAILABLELabel_ttf1->setPosition(Vec2(265, visibleSize.height*(0.020) + origin.y));
+	misslesAVAILABLELabel_ttf1->setColor(ccc3(0, 0, 0));
+
+	// These labels contain the actual number of the AVAILABLE towers and change the label to show changes
+	_machineGunsAVAILABLELabel->setPosition(Vec2(45, visibleSize.height*(0.06) + origin.y));
+	_fastMachineGunsAVAILABLELabel->setPosition(Vec2(115, visibleSize.height*(0.06) + origin.y));
+	_misslesAVAILABLELabel->setPosition(Vec2(180, visibleSize.height*(0.06) + origin.y));
+
 	// Add the coins label to the hud and set its posiion
 	LabelTTF* coins_ttf1 = LabelTTF::create("COINS = ", "ARMYRUST", 18,
 		CCSizeMake(245, 32), kCCTextAlignmentCenter);
-	LabelTTF* score_ttf2 = LabelTTF::create("SCORE = ", "ARMYRUST", 18,
-		CCSizeMake(245, 32), kCCTextAlignmentCenter);
-
-
-	//scoreLabel = Label::create(tempscore->getCString(), "Helvetica", 12,
-	//CCSizeMake(245, 32), kCCTextAlignmentCenter);
-
 	coins_ttf1->setPosition(Vec2(winSize.width - 80, visibleSize.height*(0.08) + origin.y));
 	coins_ttf1->setColor(ccc3(0, 0, 0));
+	// Add the coins label which represents the amount of coins currently owned
 	_coinLabel->setPosition(Vec2(winSize.width - 30, visibleSize.height*(0.10) + origin.y));
 
-	score_ttf2->setPosition(Vec2(winSize.width - 225, visibleSize.height*(0.08) + origin.y));
+	// Add the score label to the hud and set its position
+	LabelTTF* score_ttf2 = LabelTTF::create("SCORE = ", "ARMYRUST", 18,
+		CCSizeMake(245, 32), kCCTextAlignmentCenter);
+	score_ttf2->setPosition(Vec2(winSize.width - 205, visibleSize.height*(0.08) + origin.y));
 	score_ttf2->setColor(ccc3(0, 0, 0));
-	_scoreLabel->setPosition(Vec2(winSize.width - 160, visibleSize.height*(0.10) + origin.y));
+	// Add the score label which represents the amount of score currently earned
+	_scoreLabel->setPosition(Vec2(winSize.width - 140, visibleSize.height*(0.10) + origin.y));
 	//scoreLabel->setColor(ccc3(0, 0, 0));
+	
+
+	this->addChild(machineGunLabel_ttf1);
+	this->addChild(fastMachineGunLabel_ttf1);
+	this->addChild(missleLabel_ttf1);
+	this->addChild(machineGunATKLabel_ttf1);
+	this->addChild(fastMachineGunATKLabel_ttf1);
+	this->addChild(missleATKLabel_ttf1);
+	this->addChild(machineGunRNGLabel_ttf1);
+	this->addChild(fastMachineGunRNGLabel_ttf1);
+	this->addChild(missleRNGLabel_ttf1);
+	this->addChild(machineGunCOSTLabel_ttf1);
+	this->addChild(fastMachineGunCOSTLabel_ttf1);
+	this->addChild(missleCOSTLabel_ttf1);
+	this->addChild(machineGunsAVAILABLELabel_ttf1);
+	this->addChild(fastMachineGunsAVAILABLELabel_ttf1);
+	this->addChild(misslesAVAILABLELabel_ttf1);
+
+	this->addChild(_machineGunATKLabel);
+	this->addChild(_fastMachineGunATKLabel);
+	this->addChild(_missleATKLabel);
+	this->addChild(_machineGunRNGLabel);
+	this->addChild(_fastMachineGunRNGLabel);
+	this->addChild(_missleRNGLabel);
+	this->addChild(_machineGunCOSTLabel);
+	this->addChild(_fastMachineGunCOSTLabel);
+	this->addChild(_missleCOSTLabel);
+	this->addChild(_machineGunsAVAILABLELabel);
+	this->addChild(_fastMachineGunsAVAILABLELabel);
+	this->addChild(_misslesAVAILABLELabel);
 
 	this->addChild(coins_ttf1);
 	this->addChild(score_ttf2);
@@ -224,6 +426,102 @@ void GameHUD::onTouchEnded(Touch* touch, Event* event)
 		selSpriteRange = NULL;
 	}
 
+}
+
+void GameHUD::machineGunATKInit(float machineGunATK)
+{
+	// This updates the number of coins collects on the hud
+	String *labelMachineATK = new String();
+	labelMachineATK->initWithFormat("%.1f", machineGunATK);
+	_machineGunATKLabel->setString(labelMachineATK->getCString());
+}
+
+void GameHUD::fastMachineGunATKInit(float fastMachineGunATK)
+{
+	// This updates the number of coins collects on the hud
+	String *labelFastMachineATK = new String();
+	labelFastMachineATK->initWithFormat("%.1f", fastMachineGunATK);
+	_fastMachineGunATKLabel->setString(labelFastMachineATK->getCString());
+}
+
+void GameHUD::missleATKInit(float missleATK)
+{
+	// This updates the number of coins collects on the hud
+	String *labelMissleATK = new String();
+	labelMissleATK->initWithFormat("%.1f", missleATK);
+	_missleATKLabel->setString(labelMissleATK->getCString());
+}
+
+void GameHUD::machineGunRNGInit(float machineGunRNG)
+{
+	// This updates the number of coins collects on the hud
+	String *labelMachineRNG = new String();
+	labelMachineRNG->initWithFormat("%.1f", machineGunRNG);
+	_machineGunRNGLabel->setString(labelMachineRNG->getCString());
+}
+
+void GameHUD::fastMachineGunRNGInit(float fastMachineGunRNG)
+{
+	// This updates the number of coins collects on the hud
+	String *labelFastMachineRNG = new String();
+	labelFastMachineRNG->initWithFormat("%.1f", fastMachineGunRNG);
+	_fastMachineGunRNGLabel->setString(labelFastMachineRNG->getCString());
+}
+
+void GameHUD::missleRNGInit(float missleRNG)
+{
+	// This updates the number of coins collects on the hud
+	String *labelMissleRNG = new String();
+	labelMissleRNG->initWithFormat("%.1f", missleRNG);
+	_missleRNGLabel->setString(labelMissleRNG->getCString());
+}
+
+void GameHUD::machineGunCOSTInit(int machineGunCOST)
+{
+	// This updates the number of coins collects on the hud
+	String *labelMachineCOST = new String();
+	labelMachineCOST->initWithFormat("%d", machineGunCOST);
+	_machineGunCOSTLabel->setString(labelMachineCOST->getCString());
+}
+
+void GameHUD::fastMachineGunCOSTInit(int fastMachineGunCOST)
+{
+	// This updates the number of coins collects on the hud
+	String *labelFastMachineCOST = new String();
+	labelFastMachineCOST->initWithFormat("%d", fastMachineGunCOST);
+	_fastMachineGunCOSTLabel->setString(labelFastMachineCOST->getCString());
+}
+
+void GameHUD::missleCOSTInit(int missleCOST)
+{
+	// This updates the number of coins collects on the hud
+	String *labelMissleCOST = new String();
+	labelMissleCOST->initWithFormat("%d", missleCOST);
+	_missleCOSTLabel->setString(labelMissleCOST->getCString());
+}
+// AVAILABLE TOWERS UPDATES
+void GameHUD::machineGunsAVAILABLEInit(int machineGunsAVAILABLE)
+{
+	// This updates the number of coins collects on the hud
+	String *labelMachinesAVAILABLE = new String();
+	labelMachinesAVAILABLE->initWithFormat("%d", machineGunsAVAILABLE);
+	_machineGunsAVAILABLELabel->setString(labelMachinesAVAILABLE->getCString());
+}
+
+void GameHUD::fastMachineGunsAVAILABLEInit(int fastMachineGunsAVAILABLE)
+{
+	// This updates the number of coins collects on the hud
+	String *labelFastMachinesAVAILABLE = new String();
+	labelFastMachinesAVAILABLE->initWithFormat("%d", fastMachineGunsAVAILABLE);
+	_fastMachineGunsAVAILABLELabel->setString(labelFastMachinesAVAILABLE->getCString());
+}
+
+void GameHUD::misslesAVAILABLEInit(int misslesAVAILABLE)
+{
+	// This updates the number of coins collects on the hud
+	String *labelMisslesAVAILABLE = new String();
+	labelMisslesAVAILABLE->initWithFormat("%d", misslesAVAILABLE);
+	_misslesAVAILABLELabel->setString(labelMisslesAVAILABLE->getCString());
 }
 
 void GameHUD::numCoinsCollectedChanged(int numCoinsCollected)
