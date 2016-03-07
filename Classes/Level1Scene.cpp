@@ -11,7 +11,9 @@
 
 USING_NS_CC;
 
-int totalCreepsLeft = 120;
+int totalSoldiers = 5;
+int totalDogs = 2;
+int totalCreepsLeft = totalSoldiers + totalDogs - 2;
 int totalScoreOnWin = 0;
 
 
@@ -30,11 +32,14 @@ int totalMissleTowersAvailable;
 
 Scene* Level1::createScene()
 {
+
 	// 'Level1Scene' is an autorelease object
 	auto Level1Scene = Scene::create();
 
 	CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("War.wav", true);
+
+
 
 	CCLOG("Total creeps count = %d", totalCreepsLeft);
 
@@ -60,6 +65,7 @@ Scene* Level1::createScene()
 	// Level1Scene->addChild(myGameHud);
 
 	DataModel *m = DataModel::getModel();
+	m->finalScore = 0;
 	m->_gameLayer = layer; // add this
 	layer->_hud = hud;
 
@@ -93,6 +99,12 @@ bool Level1::init()
 	{
 		return false;
 	}
+
+	// Reset the creeps and score
+	totalSoldiers = 5;
+	totalDogs = 2;
+	totalCreepsLeft = totalSoldiers + totalDogs - 2;
+	totalScoreOnWin = 0;
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -217,12 +229,12 @@ void Level1::addWaves()
 	Wave *wave = NULL;
 
 	// Create a wave of 75 Fast red creeps with a spawn rate of 0.7 seconds
-	wave = Wave::create()->initWithCreep(FastRedCreep::creep(), 0.7, 100);
+	wave = Wave::create()->initWithCreep(FastRedCreep::creep(), 0.7, totalSoldiers);
 	m->waves.pushBack(wave);
 	wave = NULL;
 
 	// Create a wave of 10 Strong GreenCreeps and spawn them every 2 seconds
-	wave = Wave::create()->initWithCreep(StrongGreenCreep::creep(), 2.0, 30);
+	wave = Wave::create()->initWithCreep(StrongGreenCreep::creep(), 2.0, totalDogs);
 	m->waves.pushBack(wave);
 	wave = NULL;
 }
@@ -468,7 +480,7 @@ void Level1::update(float dt) {
 	DataModel *m = DataModel::getModel();
 	// _hud->machineGunATKInit(machineGunProjectileDamage);
 	Vector<Projectile*> projectileToDelete;
-	for (int i = 0; i < m->projectiles.size(); ++i)
+	for (int i = 0; i < m->projectiles.size(); i++)
 	{
 		auto projectile = m->projectiles.at(i);
 		auto projectileSprite = projectile->projectileSprite;
@@ -477,7 +489,7 @@ void Level1::update(float dt) {
 			projectile->getContentSize().width,
 			projectile->getContentSize().height);
 		Vector<Creep *> targetsToDelete;
-		for each (Creep* target in m->targets)
+		for(auto target : m->targets)
 		{
 			Rect targetRect = Rect(target->getPositionX() - (target->getContentSize().width),
 				target->getPositionY() - (target->getContentSize().height),
@@ -503,10 +515,10 @@ void Level1::update(float dt) {
 				break;
 			}
 		}
-		// for (auto target : targetsToDelete)
-		for (int i = 0; i < targetsToDelete.size(); ++i)
+		for (auto target : targetsToDelete)
+		//for (int i = 0; i < targetsToDelete.size(); ++i)
 		{
-			Creep* target = (Creep*)(targetsToDelete.at(i));
+			// Creep* target = (Creep*)(targetsToDelete.at(i));
 
 			totalCreepsLeft--;
 
@@ -522,6 +534,12 @@ void Level1::update(float dt) {
 			// If you've killed all the creeps, change scene
 			if (totalCreepsLeft == 0)
 			{
+				// Remove all the remaining creeps
+				for each(Creep* target in targetsToDelete) 
+				{
+					m->targets.eraseObject(target);
+					this->removeChild(target, true);
+				}
 				youWon(_scCollected, _numCollected);
 				
 			}
@@ -562,7 +580,9 @@ void Level1::youWon(int finalScore, int finalCoins)
 	m->targets.clear();
 	m->waves.clear();
 	m->towers.clear();    // We will deal with it later.
-	m->projectiles.clear(); */ // We will deal with it later.
+	m->projectiles.clear();  // We will deal with it later.*/
+
+	removeAllChildrenWithCleanup(true);
 
 	auto loadVictory = Level1Victory::createScene();
 
@@ -575,6 +595,7 @@ void delayProjectileDelete(float dt)
 {
 
 }
+
 
 /*void Level1::onEnter()
 {
