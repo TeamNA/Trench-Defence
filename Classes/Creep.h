@@ -19,6 +19,8 @@ public:
 	WayPoint* getNextWaypoint();
 	WayPoint* getCurrentWaypoint();
 	CREATE_FUNC(Creep);
+
+	void youLost();
 };
 
 class FastRedCreep : public Creep

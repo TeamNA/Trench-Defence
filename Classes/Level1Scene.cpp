@@ -1,5 +1,6 @@
 // #include "base/CCValue.h"
 #include "Level1Scene.h"
+#include "Level1Victory.h"
 #include "StartMenuScene.h"
 #include "Tower.h" // We will deal with it later.
 #include "DataModel.h"
@@ -10,7 +11,8 @@
 
 USING_NS_CC;
 
-int totalCreepsLeft = 75;
+int totalCreepsLeft = 120;
+int totalScoreOnWin = 0;
 
 
 // float machineGunProjectileDamage = MachineGunProjectile::projectile()->projectileDamage;
@@ -67,14 +69,14 @@ Scene* Level1::createScene()
 
 Level1::~Level1()
 {
-	// DataModel *m = DataModel::getModel();
+	/*DataModel *m = DataModel::getModel();
 	// turretBases->release();
-	/*m->waypoints.clear();
+	m->waypoints.clear();
 	m->targets.clear();
 	m->waves.clear();
 	m->towers.clear();    // We will deal with it later.
-	m->projectiles.clear();  // We will deal with it later.
-	*/
+	m->projectiles.clear();  // We will deal with it later.*/
+	
 }
 
 // on "init" you need to initialize your instance
@@ -495,7 +497,7 @@ void Level1::update(float dt) {
 				
 				if (creep->curHp <= 0)
 				{
-					
+					creep->curHp = 0;
 					targetsToDelete.pushBack(creep);
 				}
 				break;
@@ -520,14 +522,7 @@ void Level1::update(float dt) {
 			// If you've killed all the creeps, change scene
 			if (totalCreepsLeft == 0)
 			{
-				youWon();
-
-				auto loadMenu = StartMenu::createScene();
-				//DataModel *m = DataModel::getModel();
-				// Director::getInstance()->popScene();
-				// Director::getInstance()->pushScene((1, loadMenu));
-
-				Director::getInstance()->replaceScene(TransitionScene::create(5, loadMenu));
+				youWon(_scCollected, _numCollected);
 				
 			}
 
@@ -546,9 +541,13 @@ void Level1::update(float dt) {
 
 }
 
-void Level1::youWon()
+void Level1::youWon(int finalScore, int finalCoins)
 {
+
 	DataModel *m = DataModel::getModel();
+
+	totalScoreOnWin = finalScore + (finalCoins * 10);
+	m->finalScore = totalScoreOnWin;
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -557,6 +556,18 @@ void Level1::youWon()
 		CCSizeMake(245, 32), kCCTextAlignmentCenter);
 	youWon_ttf1->setPosition(Vec2(265, visibleSize.height*(0.6) + origin.y));
 	m->_gameLayer->addChild(youWon_ttf1);
+
+	// turretBases->release();
+	/*m->waypoints.clear();
+	m->targets.clear();
+	m->waves.clear();
+	m->towers.clear();    // We will deal with it later.
+	m->projectiles.clear(); */ // We will deal with it later.
+
+	auto loadVictory = Level1Victory::createScene();
+
+	Director::getInstance()->sharedDirector()->replaceScene(TransitionFade::create(3, loadVictory));
+
 }
 
 

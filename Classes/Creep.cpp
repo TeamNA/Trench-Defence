@@ -160,9 +160,6 @@ WayPoint* Creep::getNextWaypoint()
 		this->addChild(loseLabel);*/
 
 		youLost();
-
-		auto loadMenu = StartMenu::createScene();
-		Director::getInstance()->replaceScene(TransitionFade::create(3, loadMenu));
 	}
 
 
@@ -184,5 +181,6 @@ void Creep::youLost()
 	youLost_ttf1->setPosition(Vec2(265, visibleSize.height*(0.6) + origin.y));
 	m->_gameLayer->addChild(youLost_ttf1);
 
-
+	auto loadMenu = StartMenu::createScene();
+	Director::getInstance()->replaceScene(TransitionFade::create(5, loadMenu));
 }

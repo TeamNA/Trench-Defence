@@ -44,7 +44,7 @@ public:
 	int getSCount() { return count; };
 	void setSCount(int s) { count = s; };
 
-	void youWon();
+	void youWon(int finalScore, int finalCoins);
 
 	Point position;
 	GameHUD *gameHUD;

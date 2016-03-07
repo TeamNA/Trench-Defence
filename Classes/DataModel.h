@@ -26,6 +26,7 @@ public:
 	Vector<Wave*> waves;
 	Vector<Tower*> towers;    // We will deal with it later.
 	Vector<Projectile*> projectiles;
+	int finalScore;
 	// Vector<MachineGunProjectile*> machineGunProjectiles;  
 	// Vector<FastMachineGunProjectile*> fastMachineGunProjectiles;  
 	// Vector<MissleProjectile*> missleProjectiles;  

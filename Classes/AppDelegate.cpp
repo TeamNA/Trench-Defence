@@ -13,6 +13,7 @@
 #include "HistoryScene.h"
 #include "HistorySecond.h"
 #include "HistoryThird.h"
+#include "Level1Victory.h"
 
 USING_NS_CC;
 

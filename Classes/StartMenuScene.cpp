@@ -137,7 +137,7 @@ bool StartMenu::init()
 	// add the label as a child to this layer
 	this->addChild(didYouKnowLabel, 3);
 
-	updateFactTimer(0.1f);
+	updateFactTimer(0.0f);
 
 	this->scheduleUpdate();
 
@@ -199,7 +199,7 @@ void StartMenu::onEnter() {
 	Layer::onEnter();
 	// CCLog("onEnter");
 	printf("onEnter");
-	this->schedule(schedule_selector(StartMenu::updateFactTimer), 3.0f);
+	this->schedule(schedule_selector(StartMenu::updateFactTimer), 5.0f);
 	this->scheduleUpdate();
 }
 
