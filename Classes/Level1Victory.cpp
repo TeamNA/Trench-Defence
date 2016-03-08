@@ -10,6 +10,8 @@ USING_NS_CC;
 
 int finalLevel1Score;
 
+UserDefault *deef = UserDefault::getInstance();
+
 Scene* Level1Victory::createScene()
 {
 	// 'scene' is an autorelease object
@@ -76,13 +78,14 @@ bool Level1Victory::init()
 	sprite->setScale(scale);
 
 	// add the sprite as a child to this layer
-	//    this->addChild(sprite, 1);
+	    this->addChild(sprite, -2);
 
 
 	// add the sprite as a child to this layer
 	//this->addChild(sprite, 0);
 
 	//Add a Settings Button
+		int score = deef->getIntegerForKey("BOOM");
 	ui::Button* settingsBtn = ui::Button::create("MainMenu.png");
 	settingsBtn->setPosition(Vec2(visibleSize.width * 0.87 + origin.x, visibleSize.height*0.195 + origin.y));
 	settingsBtn->setScale(0.8f);
@@ -90,28 +93,53 @@ bool Level1Victory::init()
 	settingsBtn->setTitleFontSize(80);
 	settingsBtn->setColor(Color3B(159, 168, 176));
 	settingsBtn->addTouchEventListener(CC_CALLBACK_0(Level1Victory::startButtonPressed, this));
-	this->addChild(settingsBtn, 1);
+	this->addChild(settingsBtn, -2);
 	// add the sprite as a child to this layer
-	this->addChild(sprite, -2);
+	//this->addChild(sprite, -2);
 
 
 	// Final Score labels
 	_finalScoreLabel = new CCLabelTTF();
-	_finalScoreLabel->initWithString("5", "Verdana-Bold", 26.0);
-	_finalScoreLabel->setColor(ccc3(0, 0, 0));
+	_finalScoreLabel->initWithString("5", "Verdana-Bold", 13.0);
+	_finalScoreLabel->setColor(ccc3(255, 255, 255));
 	finalScoreInit(finalLevel1Score);
 
 	// Labels for the score name
-	LabelTTF* finalScoreLabel_ttf1 = LabelTTF::create("Final Score: ", "ARMYRUST", 26,
+	LabelTTF* finalScoreLabel_ttf1 = LabelTTF::create("YOUR SCORE: ", "ARMYRUST", 16,
 		CCSizeMake(245, 32), kCCTextAlignmentLeft);
-	finalScoreLabel_ttf1->setPosition(Vec2((visibleSize.width / 2) + origin.x + 50, visibleSize.height*(0.2) + origin.y));
-	finalScoreLabel_ttf1->setColor(ccc3(0, 0, 0));
+	finalScoreLabel_ttf1->setPosition(Vec2((visibleSize.width / 2) + origin.x + 50, visibleSize.height*(0.4) + origin.y));
+	finalScoreLabel_ttf1->setColor(ccc3(255, 255, 255));
 
-	_finalScoreLabel->setPosition(Vec2(visibleSize.width / 2 + origin.x + 100, visibleSize.height*(0.2) + origin.y));
+	_finalScoreLabel->setPosition(Vec2(visibleSize.width / 2 + origin.x + 55, visibleSize.height*(0.43) + origin.y));
 
-	this->addChild(finalScoreLabel_ttf1);
+	// Final Score labels
+	_highScoreLabel = new CCLabelTTF();
 
-	this->addChild(_finalScoreLabel);
+	String *labelFinalScore = new String();
+	labelFinalScore->initWithFormat("%d", score);
+	_highScoreLabel->setString(labelFinalScore->getCString());
+
+	//_highScoreLabel->initWithString(finalLevel1Score, "Verdana-Bold", 13.0);
+	_highScoreLabel->setColor(ccc3(255, 255, 255));
+	//finalScoreInit(score);
+
+	// Labels for the score name
+	LabelTTF* highScoreLabel_ttf1 = LabelTTF::create("HIGH SCORE : ", "ARMYRUST", 16,
+		CCSizeMake(245, 32), kCCTextAlignmentLeft);
+	highScoreLabel_ttf1->setPosition(Vec2((visibleSize.width / 2) + origin.x + 50, visibleSize.height*(0.3) + origin.y));
+	highScoreLabel_ttf1->setColor(ccc3(255, 255, 255));
+
+	_highScoreLabel->setPosition(Vec2(visibleSize.width / 2 + origin.x + 55, visibleSize.height*(0.33) + origin.y));
+
+	this->addChild(finalScoreLabel_ttf1,-2);
+
+	this->addChild(_finalScoreLabel,-2);
+
+	this->addChild(highScoreLabel_ttf1, -2);
+
+	this->addChild(_highScoreLabel, -2);
+
+	
 
 	return true;
 

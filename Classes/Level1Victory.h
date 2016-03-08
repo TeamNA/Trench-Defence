@@ -17,6 +17,7 @@ public:
 	void startButtonPressed();
 	void settingsButtonPressed();
 	void finalScoreInit(int finalScore);
+	void highScoreInit(int highScore);
 
 	// a selector callback
 	void menuCloseCallback(cocos2d::Ref* pSender);
@@ -27,7 +28,9 @@ public:
 private:
 	cocos2d::Label *finalScoreLabel;
 	LabelTTF *_finalScoreLabel;
+	LabelTTF *_highScoreLabel;
 
 };
 
 #endif // __VICTORY_SCENE_H__
+
