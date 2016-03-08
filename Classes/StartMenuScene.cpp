@@ -3,9 +3,9 @@
 #include "StartMenuScene.h"
 #include "Level1Scene.h"
 #include "HistoryScene.h"
-#include "HowToPlay.h"
 #include "SimpleAudioEngine.h"
 #include "DataModel.h"
+#include "HowToPlay.h"
 
 USING_NS_CC;
 
@@ -76,6 +76,7 @@ bool StartMenu::init()
 	this->addChild(sprite, 0);
 
 	// Add a button to start
+	// Add a button to start
 	ui::Button* startBtn = ui::Button::create("Normal-Button.png");
 	startBtn->setPosition(Vec2(visibleSize.width / 1.80 + origin.x, visibleSize.height*0.57 + origin.y));
 	startBtn->setScale(0.6f);
@@ -121,7 +122,7 @@ bool StartMenu::init()
 		origin.y + visibleSize.height*0.29));
 
 	// change the colour of the label to grey
-	didYouKnowHeadingLabel->setColor(ccc3(255, 255, 255));
+	didYouKnowHeadingLabel->setColor(ccc3(81, 23, 117));
 
 	// add the label as a child to this layer
 	this->addChild(didYouKnowHeadingLabel, 3);
@@ -132,12 +133,12 @@ bool StartMenu::init()
 	didYouKnowLabel->setPosition(Vec2(origin.x + visibleSize.width*0.73,
 		origin.y + visibleSize.height*0.16));
 	// change the colour of the label to grey
-	didYouKnowLabel->setColor(ccc3(128, 128, 128));
+	didYouKnowLabel->setColor(ccc3(81, 23, 117));
 	// didYouKnowLabel->setString(didYouKnowRandomFact.getCString());
 	// add the label as a child to this layer
 	this->addChild(didYouKnowLabel, 3);
 
-	updateFactTimer(0.1f);
+	updateFactTimer(0.0f);
 
 	this->scheduleUpdate();
 
@@ -149,6 +150,14 @@ void StartMenu::startButtonPressed()
 	// get startMenu scene and run it
 	auto loadLevel1 = Level1::createScene();
 	Director::getInstance()->replaceScene(TransitionFade::create(2, loadLevel1));
+	//Director::getInstance()->pushScene(loadLevel1);
+}
+
+void StartMenu::rankButtonPressed()
+{
+	auto loadLevel1 = HowToPlay::createScene();
+	Director::getInstance()->replaceScene(TransitionFade::create(2, loadLevel1));
+	//Director::getInstance()->pushScene(loadLevel1);
 }
 
 void StartMenu::settingsButtonPressed()
@@ -156,13 +165,6 @@ void StartMenu::settingsButtonPressed()
 	// get startMenu scene and run it
 	auto loadHistoryScene = HistoryScene::createScene();
 	Director::getInstance()->replaceScene(TransitionFade::create(2, loadHistoryScene));
-}
-
-void StartMenu::rankButtonPressed()
-{
-	// get startMenu scene and run it
-	auto loadHowToPlay = HowToPlay::createScene();
-	Director::getInstance()->replaceScene(TransitionFade::create(2, loadHowToPlay));
 }
 
 void StartMenu::updateFactTimer(float dt) {
@@ -175,7 +177,7 @@ void StartMenu::updateFactTimer(float dt) {
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	const char *factArray[] = {
-		"In WW1, trenches were used to stop enemies from advancing.",
+		"In WW1, trenches were used to stop enemy from advancing.",
 		"By the end of 1914, both sides of the war had built trenches that went from the North Sea and through Belgium and France.",
 		"It is estimated there were about 2,490km of trench lines dug during WW1.",
 		"Most soldiers would spend anywhere from 1 day up to 2 weeks in the trenches at a time.",
@@ -186,7 +188,7 @@ void StartMenu::updateFactTimer(float dt) {
 		"The land between the two enemy trench lines was called “No Man’s Land.”  No Man’s Land was sometimes covered with land mines and barbed wire. The distance between enemy trenches was anywhere from 50 to 250 yards apart.",
 		"Trench Digging Method #1: Soldiers would simply dig the trenches straight into the ground – a method known as entrenching. Entrenching was fast, but the soldiers were open to enemy fire while they dug.",
 		"Trench Digging Method #2: A solider would extend a trench on one end. This was called 'sapping' and was a safer method but took a lot longer.",
-		"Trench Digging Method #3: Soldiers would dig a tunnel and then remove the roof to make a trench when done. This 'tunneling' method was the safest and most difficult.",
+		"Trench Digging Method #3: Soldiers would dig a tunnel and then remove the roof to make a trench when done. This 'tunneling' method was the safest and most difficult." ,
 		"The noise and uncomfortable surroundings made it very difficult to sleep in trenches. Soldiers were constantly tired and in danger of falling asleep. This is why the watch shift was kept to 2 hours to avoid men falling asleep while on watch.",
 		"There were several cease fires or truces in the trenches during WWI. In 1914, around Christmas time both the British and German soldiers put down their weapons, came out of their trenches and exchanged gifts and sung carols – ceasing fire to celebrate Christmas. This is now known as the Christmas Truce."
 	};
@@ -203,10 +205,10 @@ void StartMenu::update(float dt)
 }
 
 void StartMenu::onEnter() {
-	CCLayer::onEnter();
+	Layer::onEnter();
 	// CCLog("onEnter");
 	printf("onEnter");
-	this->schedule(schedule_selector(StartMenu::updateFactTimer), 6.0f);
+	this->schedule(schedule_selector(StartMenu::updateFactTimer), 5.0f);
 	this->scheduleUpdate();
 }
 

@@ -8,14 +8,10 @@
 #include <string>
 #include "SimpleAudioEngine.h"
 
-
 USING_NS_CC;
 
-int totalSoldiers = 5;
-int totalDogs = 2;
-int totalCreepsLeft = totalSoldiers + totalDogs - 2;
+int totalCreepsLeft = 100;
 int totalScoreOnWin = 0;
-
 
 // float machineGunProjectileDamage = MachineGunProjectile::projectile()->projectileDamage;
 /*int machineGunTowerCost = MachineGunTower::tower()->towerCost;
@@ -28,18 +24,20 @@ int totalMachineGunTowersAvailable;
 int totalFastMachineGunTowersAvailable;
 int totalMissleTowersAvailable;
 
+Size visibleSize = Director::getInstance()->getVisibleSize();
+Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+Size winSize = CCDirector::getInstance()->getWinSize();
+
+UserDefault *def = UserDefault::getInstance();
 
 Scene* Level1::createScene()
 {
-
 	// 'Level1Scene' is an autorelease object
 	auto Level1Scene = Scene::create();
 
 	CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("War.wav", true);
-
-
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("TrenchWarLoop1.wav", true);
 
 	CCLOG("Total creeps count = %d", totalCreepsLeft);
 
@@ -53,7 +51,7 @@ Scene* Level1::createScene()
 	// auto myGameHUD = GameHUD::shareHUD();
 	GameHUD *hud = new GameHUD;
 	hud->init();
-	
+
 	// add gameHUD
 	// Level1Scene->addChild(myGameHUD, 3);
 
@@ -65,7 +63,6 @@ Scene* Level1::createScene()
 	// Level1Scene->addChild(myGameHud);
 
 	DataModel *m = DataModel::getModel();
-	m->finalScore = 0;
 	m->_gameLayer = layer; // add this
 	layer->_hud = hud;
 
@@ -82,7 +79,7 @@ Level1::~Level1()
 	m->waves.clear();
 	m->towers.clear();    // We will deal with it later.
 	m->projectiles.clear();  // We will deal with it later.*/
-	
+
 }
 
 // on "init" you need to initialize your instance
@@ -100,11 +97,6 @@ bool Level1::init()
 		return false;
 	}
 
-	// Reset the creeps and score
-	totalSoldiers = 5;
-	totalDogs = 2;
-	totalCreepsLeft = totalSoldiers + totalDogs - 2;
-	totalScoreOnWin = 0;
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -172,13 +164,15 @@ bool Level1::init()
 
 	// setViewPointCenter(_tileMap->getPositionX);
 
+	//bestScoreUpdate();
+
 	return true;
 }
 
 /*void Level1::updateAvailableTowers(int totalMachineGunTowers, int totalFastMachineGunTowers, int totalMissleTowers) {
-	totalMachineGunTowersAvailable = totalMachineGunTowers;
-	totalFastMachineGunTowersAvailable = totalFastMachineGunTowers;
-	totalMissleTowersAvailable = totalMissleTowers;
+totalMachineGunTowersAvailable = totalMachineGunTowers;
+totalFastMachineGunTowersAvailable = totalFastMachineGunTowers;
+totalMissleTowersAvailable = totalMissleTowers;
 }*/
 
 void Level1::menuCloseCallback(Ref* pSender)
@@ -229,12 +223,12 @@ void Level1::addWaves()
 	Wave *wave = NULL;
 
 	// Create a wave of 75 Fast red creeps with a spawn rate of 0.7 seconds
-	wave = Wave::create()->initWithCreep(FastRedCreep::creep(), 0.7, totalSoldiers);
+	wave = Wave::create()->initWithCreep(FastRedCreep::creep(), 0.7, 1000000);
 	m->waves.pushBack(wave);
 	wave = NULL;
 
 	// Create a wave of 10 Strong GreenCreeps and spawn them every 2 seconds
-	wave = Wave::create()->initWithCreep(StrongGreenCreep::creep(), 2.0, totalDogs);
+	wave = Wave::create()->initWithCreep(StrongGreenCreep::creep(), 2.0, 30);
 	m->waves.pushBack(wave);
 	wave = NULL;
 }
@@ -444,7 +438,7 @@ void Level1::addTower(Point pos, std::string towerType)
 				}
 			}
 		}
-		
+
 		else {
 			return;
 		}
@@ -468,7 +462,7 @@ Point Level1::boundLayerPos(Point newPos)
 }
 
 void Level1::update(float dt) {
-	
+
 	// Vector<MachineGunProjectile*> machineGunProjectilesToDelete;
 	// Vector<FastMachineGunProjectile*> fastMachineGunProjectilesToDelete;
 	// Vector<MissleProjectile*> missleProjectilesToDelete;
@@ -480,16 +474,16 @@ void Level1::update(float dt) {
 	DataModel *m = DataModel::getModel();
 	// _hud->machineGunATKInit(machineGunProjectileDamage);
 	Vector<Projectile*> projectileToDelete;
-	for (int i = 0; i < m->projectiles.size(); i++)
+	for (int i = 0; i < m->projectiles.size(); ++i)
 	{
 		auto projectile = m->projectiles.at(i);
 		auto projectileSprite = projectile->projectileSprite;
-		Rect projectileRect = Rect(projectile->getPositionX() - (projectile->getContentSize().width) ,
+		Rect projectileRect = Rect(projectile->getPositionX() - (projectile->getContentSize().width),
 			projectile->getPositionY() - (projectile->getContentSize().height),
 			projectile->getContentSize().width,
 			projectile->getContentSize().height);
 		Vector<Creep *> targetsToDelete;
-		for(auto target : m->targets)
+		for each (Creep* target in m->targets)
 		{
 			Rect targetRect = Rect(target->getPositionX() - (target->getContentSize().width),
 				target->getPositionY() - (target->getContentSize().height),
@@ -506,7 +500,7 @@ void Level1::update(float dt) {
 				CCLOG("Creeps current health is: %f", creep->curHp);
 				creep->curHp -= projectile->projectileDamage;
 				CCLOG("Creeps health after projectile damage of %f is: %f", projectile->projectileDamage, creep->curHp);
-				
+
 				if (creep->curHp <= 0)
 				{
 					creep->curHp = 0;
@@ -515,10 +509,10 @@ void Level1::update(float dt) {
 				break;
 			}
 		}
-		for (auto target : targetsToDelete)
-		//for (int i = 0; i < targetsToDelete.size(); ++i)
+		// for (auto target : targetsToDelete)
+		for (int i = 0; i < targetsToDelete.size(); ++i)
 		{
-			// Creep* target = (Creep*)(targetsToDelete.at(i));
+			Creep* target = (Creep*)(targetsToDelete.at(i));
 
 			totalCreepsLeft--;
 
@@ -530,17 +524,19 @@ void Level1::update(float dt) {
 			_hud->scoreCollectedChanged(_scCollected);
 			_numCollected++;
 			_hud->numCoinsCollectedChanged(_numCollected);
+			_hud->coinsForGamehud(_numCollected);
 
 			// If you've killed all the creeps, change scene
-			if (totalCreepsLeft == 0)
+			if (totalCreepsLeft <= 0)
 			{
-				// Remove all the remaining creeps
-				for each(Creep* target in targetsToDelete) 
-				{
-					m->targets.eraseObject(target);
-					this->removeChild(target, true);
-				}
+				
+				totalCreepsLeft = 100;
+				//addWaves();
+				log("HIGHSCORE = %d", def->getIntegerForKey("BOOM"));
+
+				
 				youWon(_scCollected, _numCollected);
+;
 				
 			}
 
@@ -554,7 +550,6 @@ void Level1::update(float dt) {
 		this->removeChild(projectile, true);
 
 	}
-	
 
 
 }
@@ -567,27 +562,54 @@ void Level1::youWon(int finalScore, int finalCoins)
 	totalScoreOnWin = finalScore + (finalCoins * 10);
 	m->finalScore = totalScoreOnWin;
 
-	Size visibleSize = Director::getInstance()->getVisibleSize();
-	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
-	CCLabelTTF* youWon_ttf1 = CCLabelTTF::create("Level 1 Passed! \n\n\nYOU WIN!!!", "Helvetica", 32,
-		CCSizeMake(245, 32), kCCTextAlignmentCenter);
+	CCLabelTTF* youWon_ttf1 = CCLabelTTF::create("YOU HAVE WON", "Helvetica", 32,
+	CCSizeMake(245, 32), kCCTextAlignmentCenter);
 	youWon_ttf1->setPosition(Vec2(265, visibleSize.height*(0.6) + origin.y));
-	m->_gameLayer->addChild(youWon_ttf1);
 
-	// turretBases->release();
-	/*m->waypoints.clear();
-	m->targets.clear();
-	m->waves.clear();
-	m->towers.clear();    // We will deal with it later.
-	m->projectiles.clear();  // We will deal with it later.*/
+	//def->setIntegerForKey("BOOM", 0);
 
-	removeAllChildrenWithCleanup(true);
+	if (def->getIntegerForKey("BOOM") < totalScoreOnWin)
+	{
+
+		def->setIntegerForKey("BOOM", totalScoreOnWin);
+
+		def->flush();
+
+	}
+
+	//m->_gameLayer->addChild(youWon_ttf1);
+	/**
+	int best = UserDefault::getInstance()->getIntegerForKey("Best_Score");
+	
+
+	if (best < _scCollected)
+	{
+		best = _scCollected;
+
+		char score[256];
+		sprintf(score, "%i", best);
+		UserDefault::getInstance()->setIntegerForKey("Best_Score", best);
+		bestScore = LabelTTF::create(score, "Helvetica", 32,
+		CCSizeMake(245, 32), kCCTextAlignmentCenter);
+		bestScore->setPosition(Vec2(265, visibleSize.height*(0.6) + origin.y));
+		UserDefault::getInstance()->flush();
+	}
+	else
+	{
+		char buffer[10];
+		sprintf(buffer, "%i", best);
+		bestScore = LabelTTF::create(buffer, "Helvetica", 32,
+		CCSizeMake(245, 32), kCCTextAlignmentCenter);
+		bestScore->setPosition(Vec2(265, visibleSize.height*(0.6) + origin.y));
+	}*/
+
+	//bestScore->addChild(bestScore);
 
 	auto loadVictory = Level1Victory::createScene();
+	auto loadMenu = StartMenu::createScene();
 
 	Director::getInstance()->sharedDirector()->replaceScene(TransitionFade::create(3, loadVictory));
-
+	//Director::getInstance()->sharedDirector()->popScene();
 }
 
 
@@ -597,20 +619,23 @@ void delayProjectileDelete(float dt)
 }
 
 
+	
+
+
 /*void Level1::onEnter()
 {
 }*/
 /*void Level1::onExit()
 {
-	/*DataModel *m = DataModel::getModel();
-	m->waypoints.clear();
-	m->targets.clear();
-	m->waves.clear();
-	m->towers.clear();    // We will deal with it later.
-	m->projectiles.clear();  // We will deal with it later.
-	//this->unscheduleAllSelectors();
-	// this->release();
-	// CCTextureCache sharedTextureCache[removeAllTextures];
+/*DataModel *m = DataModel::getModel();
+m->waypoints.clear();
+m->targets.clear();
+m->waves.clear();
+m->towers.clear();    // We will deal with it later.
+m->projectiles.clear();  // We will deal with it later.
+//this->unscheduleAllSelectors();
+// this->release();
+// CCTextureCache sharedTextureCache[removeAllTextures];
 }*/
 
 //  #endif

@@ -20,7 +20,7 @@ USING_NS_CC;
 static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 //static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
- static cocos2d::Size mediumResolutionSize = cocos2d::Size(720, 480);
+static cocos2d::Size mediumResolutionSize = cocos2d::Size(720, 480);
 // static cocos2d::Size largeResolutionSize = cocos2d::Size(720, 480);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(720, 480);
 // static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
@@ -56,15 +56,15 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	auto director = Director::getInstance();
 	auto glview = director->getOpenGLView();
 
-	int screenWidth = 1355;
-	int screenHeight = 740;
+	int screenWidth = 1900;
+	int screenHeight = 1040;
 
 	int screenWidthAndroid = 320;
 	int screenHeightAndroid = 480;
 
 	if (!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-		glview = GLViewImpl::createWithRect("Trench-Defence", Rect(0, 0, screenWidth, screenHeight));
+		glview = GLViewImpl::createWithRect("Trench-Defence", Rect(40, 0, screenWidth, screenHeight));
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 		glview = GLViewImpl::createWithRect("Trench-Defence", Rect(0, 0, screenWidthAndroid, screenHeightAndroid));
 #else
@@ -80,6 +80,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	director->setAnimationInterval(1.0 / 60);
 
 	// Set the design resolution
+	//glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionExactFit);
 	glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionExactFit);
 	// glview->setDesignResolutionSize(400, 475, kResolutionExactFit);
 	Size frameSize = glview->getFrameSize();
@@ -125,4 +126,3 @@ void AppDelegate::applicationWillEnterForeground() {
 	// if you use SimpleAudioEngine, it must resume here
 	// SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 }
-

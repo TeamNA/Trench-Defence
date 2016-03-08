@@ -41,8 +41,8 @@ bool Level1Victory::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	finalLevel1Score = m->finalScore;
-		//MachineGunTower::tower()->towersAvailable;
-	
+	//MachineGunTower::tower()->towersAvailable;
+
 
 	/////////////////////////////
 	// 2. add a menu item with "X" image, which is clicked to quit the program
